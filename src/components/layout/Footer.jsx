@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Heart, Mail, Phone, MapPin, Share2, Globe, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -22,16 +22,13 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-deep-teal transition-colors">
-                <Facebook className="w-5 h-5" />
+                <Share2 className="w-5 h-5" />
               </a>
               <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-deep-teal transition-colors">
-                <Twitter className="w-5 h-5" />
+                <Globe className="w-5 h-5" />
               </a>
               <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-deep-teal transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-deep-teal transition-colors">
-                <Linkedin className="w-5 h-5" />
+                <MessageCircle className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -57,7 +54,7 @@ export default function Footer() {
           <div>
             <h4 className="font-display text-lg font-semibold mb-4">Services</h4>
             <ul className="space-y-3">
-              {['Primary Care', 'Dermatology', 'Mental Health', 'Pediatrics', 'Cardiology', 'Women's Health'].map((service) => (
+              {['Primary Care', 'Dermatology', 'Mental Health', 'Pediatrics', 'Cardiology', 'Women\'s Health'].map((service) => (
                 <li key={service}>
                   <Link
                     to="/services"
