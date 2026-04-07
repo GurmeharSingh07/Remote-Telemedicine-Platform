@@ -7,6 +7,7 @@ import Stats from '../components/home/Stats';
 import Specialists from '../components/home/Specialists';
 import Testimonials from '../components/home/Testimonials';
 import CTASection from '../components/home/CTASection';
+import Chatbot from '../components/shared/Chatbot';
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <Specialists />
       <Testimonials />
       <CTASection />
+      <Chatbot />
     </motion.div>
   );
 }
