@@ -1,26 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
+/* Global Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* HealNet Design Tokens */
+  --background: #FFFFFF;
+  --background-alt: #F7F9FC;
+  --foreground: #1A2332;
+
+  /* Accent Colors */
+  --primary-accent: #F2C4CE;
+  --secondary-accent: #A8EDDF;
+  --tertiary: #D4A89A;
+  --gold: #C9A96E;
+
+  /* Text */
+  --text-primary: #1A2332;
+  --text-muted: #8A9BB0;
+
+  /* Glass & Effects */
+  --glass: rgba(255,255,255,0.65);
+  --gradient-primary: linear-gradient(135deg, #F2C4CE, #A8EDDF);
+
+  /* Borders & Shadows */
+  --border-color: rgba(168,237,223,0.4);
+  --shadow-default: 0 8px 32px rgba(180,210,220,0.2);
+  --shadow-bloom: 0 16px 48px rgba(180,210,220,0.35);
+
+  /* Radii */
+  --radius-card: 24px;
+  --radius-button: 999px;
+  --radius-panel: 16px;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary-accent: var(--primary-accent);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-tertiary: var(--tertiary);
+  --color-gold: var(--gold);
+  --color-text-muted: var(--text-muted);
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Grid Pattern Background */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(168,237,223,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,237,223,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glassmorphism */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-color);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient Border */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(var(--background), var(--background)) padding-box,
+              var(--gradient-primary) border-box;
+  border: 1px solid transparent;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.marquee-container {
+  display: flex;
+  animation: marquee 30s linear infinite;
+  width: max-content;
+}
+
+.marquee-container:hover {
+  animation-play-state: paused;
+}
+
+/* Floating Bubble Animations */
+@keyframes floatBubble1 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, -30px);
+  }
+}
+
+@keyframes floatBubble2 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-25px, 20px);
+  }
+}
+
+@keyframes floatBubble3 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(15px, -20px);
+  }
+}
+
+.animate-float-bubble-1 {
+  animation: floatBubble1 8s ease-in-out infinite;
+}
+
+.animate-float-bubble-2 {
+  animation: floatBubble2 10s ease-in-out infinite;
+}
+
+.animate-float-bubble-3 {
+  animation: floatBubble3 7s ease-in-out infinite;
+}
+
+/* 3D Perspective for Dashboard */
+.perspective-container {
+  perspective: 1200px;
+}
+
+.rotate-x-4 {
+  transform: rotateX(4deg);
+}
+
+/* Global Floating Bubbles Background Layer */
+@keyframes drift {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(30px, -40px) rotate(5deg);
+  }
+  50% {
+    transform: translate(-20px, -80px) rotate(-5deg);
+  }
+  75% {
+    transform: translate(40px, -40px) rotate(3deg);
+  }
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.06;
+}
+
+.bubble-1 {
+  width: 500px;
+  height: 500px;
+  background: #F2C4CE;
+  top: 20%;
+  left: 10%;
+  animation: drift 20s ease-in-out infinite;
+}
+
+.bubble-2 {
+  width: 400px;
+  height: 400px;
+  background: #A8EDDF;
+  top: 50%;
+  right: 15%;
+  animation: drift 25s ease-in-out infinite reverse;
+}
+
+.bubble-3 {
+  width: 350px;
+  height: 350px;
+  background: #F2C4CE;
+  bottom: 10%;
+  left: 40%;
+  animation: drift 22s ease-in-out infinite;
 }
