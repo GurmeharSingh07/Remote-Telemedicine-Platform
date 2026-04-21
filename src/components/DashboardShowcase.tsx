@@ -3,21 +3,35 @@
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  BarChart3,
+  Building2,
+  Settings,
+  Bell,
+  Calendar,
+  MapPin,
+  Clock,
+  Activity,
+  ChevronRight,
+} from "lucide-react";
 
 const navItems = [
-  { icon: "📊", label: "Dashboard", active: true },
-  { icon: "👥", label: "Patients", active: false },
-  { icon: "📁", label: "Records", active: false },
-  { icon: "📈", label: "Analytics", active: false },
-  { icon: "🏥", label: "Hospitals", active: false },
-  { icon: "⚙️", label: "Settings", active: false },
+  { icon: LayoutDashboard, label: "Dashboard", active: true },
+  { icon: Users, label: "Patients", active: false },
+  { icon: FileText, label: "Records", active: false },
+  { icon: BarChart3, label: "Analytics", active: false },
+  { icon: Building2, label: "Hospitals", active: false },
+  { icon: Settings, label: "Settings", active: false },
 ];
 
 const statsCards = [
-  { label: "Today's Appointments", value: "12", icon: "📅" },
-  { label: "Active Patients", value: "847", icon: "👥" },
-  { label: "Pending Records", value: "3", icon: "📋" },
-  { label: "AI Alerts", value: "2", icon: "🤖", highlight: true },
+  { label: "Today's Appointments", value: "12", icon: Calendar },
+  { label: "Active Patients", value: "847", icon: Users },
+  { label: "Pending Records", value: "3", icon: FileText },
+  { label: "AI Alerts", value: "2", icon: Activity, highlight: true },
 ];
 
 const patients = [
@@ -74,7 +88,7 @@ export default function DashboardShowcase() {
   };
 
   return (
-    <section className="relative w-full bg-[#F7F9FC] py-[120px] overflow-hidden">
+    <section className="relative w-full bg-[var(--background)] py-[120px] overflow-hidden border-t border-[var(--border-color)]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -83,7 +97,7 @@ export default function DashboardShowcase() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-[#F7F9FC]/85" />
+        <div className="absolute inset-0 bg-[var(--background)] opacity-85" />
       </div>
 
       <div className="relative z-10 container mx-auto px-6">
@@ -95,13 +109,13 @@ export default function DashboardShowcase() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-[11px] font-bold tracking-[0.2em] text-[#A8EDDF] uppercase">
+          <span className="text-[11px] font-bold tracking-[0.2em] text-[var(--primary-accent)] uppercase">
             THE PRODUCT
           </span>
         </motion.div>
 
         <motion.h2
-          className="text-[40px] lg:text-[56px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] text-center mt-4"
+          className="text-[40px] lg:text-[56px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] text-center mt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -110,7 +124,7 @@ export default function DashboardShowcase() {
         </motion.h2>
 
         <motion.p
-          className="text-[18px] lg:text-[20px] text-[#8A9BB0] font-[family-name:var(--font-body)] text-center mt-4 max-w-xl mx-auto"
+          className="text-[18px] lg:text-[20px] text-[var(--text-muted)] font-[family-name:var(--font-body)] text-center mt-4 max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -129,111 +143,119 @@ export default function DashboardShowcase() {
         >
           <div className="relative rotate-x-4 origin-top">
             {/* Browser Chrome */}
-            <div className="bg-white rounded-t-2xl p-4 flex items-center gap-3 border border-[rgba(168,237,223,0.3)] border-b-0">
+            <div className="bg-[var(--background-alt)] rounded-t-2xl p-4 flex items-center gap-3 border border-[var(--primary-accent)]/20 border-b-0 backdrop-blur-md">
               {/* Colored Dots */}
               <div className="flex gap-2">
-                <span className="w-3 h-3 rounded-full bg-red-400" />
-                <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                <span className="w-3 h-3 rounded-full bg-green-400" />
+                <span className="w-3 h-3 rounded-full bg-[var(--tertiary)]" />
+                <span className="w-3 h-3 rounded-full bg-[var(--gold)]" />
+                <span className="w-3 h-3 rounded-full bg-[var(--primary-accent)]" />
               </div>
               {/* URL Bar */}
-              <div className="flex-1 bg-[#F7F9FC] rounded-lg px-4 py-2 text-[13px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
+              <div className="flex-1 bg-[var(--background)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
                 app.healnet.in/dashboard
               </div>
             </div>
 
             {/* Dashboard UI */}
-            <div className="bg-white rounded-b-2xl border border-[rgba(168,237,223,0.3)] overflow-hidden flex min-h-[500px]">
+            <div className="bg-[var(--background-alt)] rounded-b-2xl border border-[var(--primary-accent)]/20 overflow-hidden flex min-h-[500px] backdrop-blur-md">
               {/* Left Sidebar */}
-              <div className="w-[200px] bg-[#F7F9FC] p-4 border-r border-[rgba(168,237,223,0.3)]">
+              <div className="w-[200px] bg-[var(--background)]/80 p-4 border-r border-[var(--border-color)]">
                 {/* Logo */}
-                <div className="text-[20px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] bg-clip-text text-transparent mb-8">
+                <div className="text-[20px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] bg-clip-text text-transparent mb-8">
                   HealNet
                 </div>
 
                 {/* Nav Items */}
                 <div className="space-y-1">
-                  {navItems.map((item) => (
-                    <div
-                      key={item.label}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] font-[family-name:var(--font-body)] cursor-pointer transition-colors ${
-                        item.active
-                          ? "bg-[#F2C4CE]/20 text-[#1A2332] border-l-2 border-[#A8EDDF]"
-                          : "text-[#8A9BB0] hover:bg-[#A8EDDF]/10"
-                      }`}
-                    >
-                      <span>{item.icon}</span>
-                      <span>{item.label}</span>
-                    </div>
-                  ))}
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={item.label}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] font-[family-name:var(--font-body)] cursor-pointer transition-colors ${
+                          item.active
+                            ? "bg-[var(--primary-accent)]/20 text-[var(--foreground)] border-l-2 border-[var(--primary-accent)]"
+                            : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10 hover:text-[var(--foreground)]"
+                        }`}
+                      >
+                        <Icon size={16} className={item.active ? "text-[var(--primary-accent)]" : ""} />
+                        <span>{item.label}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Main Content */}
-              <div className="flex-1 p-6">
+              <div className="flex-1 p-6 z-10">
                 {/* Top Bar */}
                 <div className="flex items-center justify-between mb-6">
-                  <span className="text-[18px] font-[family-name:var(--font-body)] text-[#1A2332]">
+                  <span className="text-[18px] font-[family-name:var(--font-body)] text-[var(--foreground)]">
                     Good morning, Dr. Sharma 👋
                   </span>
                   <div className="flex items-center gap-4">
-                    <span className="w-8 h-8 rounded-full bg-[#F7F9FC] flex items-center justify-center text-[#8A9BB0]">
-                      🔔
-                    </span>
-                    <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F2C4CE] to-[#A8EDDF] flex items-center justify-center text-white text-sm font-bold">
+                    <button className="w-8 h-8 rounded-full bg-[var(--background)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors relative">
+                      <Bell size={16} />
+                      <span className="absolute top-0 right-0 w-2 h-2 bg-[var(--tertiary)] rounded-full" />
+                    </button>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] text-sm font-bold shadow-[0_0_15px_var(--primary-accent)]/40">
                       DS
-                    </span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Stats Row */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  {statsCards.map((stat, i) => (
-                    <div
-                      key={stat.label}
-                      className={`glass rounded-xl p-4 ${
-                        stat.highlight ? "bg-[#F2C4CE]/20" : ""
-                      }`}
-                    >
-                      <div className="text-[13px] text-[#8A9BB0] font-[family-name:var(--font-body)] mb-1">
-                        {stat.label}
+                  {statsCards.map((stat, i) => {
+                    const Icon = stat.icon;
+                    return (
+                      <div
+                        key={stat.label}
+                        className={`rounded-xl p-4 border bg-[var(--background)]/50 backdrop-blur-sm ${
+                          stat.highlight ? "border-[var(--secondary-accent)]/50 shadow-[0_0_20px_var(--secondary-accent)]/15" : "border-[var(--border-color)]"
+                        }`}
+                      >
+                        <Icon size={18} className={`mb-2 ${stat.highlight ? "text-[var(--secondary-accent)]" : "text-[var(--primary-accent)]"}`} />
+                        <div className="text-[13px] text-[var(--text-muted)] font-[family-name:var(--font-body)] mb-1">
+                          {stat.label}
+                        </div>
+                        <div className="text-[24px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)]">
+                          {stat.value}
+                        </div>
                       </div>
-                      <div className="text-[24px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)]">
-                        {stat.value}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Two Column Layout */}
                 <div className="flex gap-6">
                   {/* Patient Timeline - 60% */}
                   <div className="flex-[3]">
-                    <h3 className="text-[16px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] mb-4">
+                    <h3 className="text-[16px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] mb-4">
                       Recent Patients
                     </h3>
                     <div className="space-y-3">
                       {patients.map((patient, i) => (
                         <div
                           key={i}
-                          className="flex items-center gap-4 p-3 rounded-xl bg-[#F7F9FC] hover:bg-[#A8EDDF]/10 transition-colors cursor-pointer"
+                          className="flex items-center gap-4 p-3 rounded-xl bg-[var(--background)]/50 border border-transparent hover:border-[var(--primary-accent)]/30 hover:bg-[var(--primary-accent)]/5 transition-all duration-300 cursor-pointer"
                         >
-                          <span className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F2C4CE] to-[#A8EDDF] flex items-center justify-center text-white text-sm font-bold">
+                          <span className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] text-sm font-bold shadow-[0_0_10px_var(--secondary-accent)]/30">
                             {patient.avatar}
                           </span>
                           <div className="flex-1">
-                            <div className="text-[14px] font-medium text-[#1A2332] font-[family-name:var(--font-body)]">
+                            <div className="text-[14px] font-medium text-[var(--foreground)] font-[family-name:var(--font-body)]">
                               {patient.name}
                             </div>
-                            <div className="text-[12px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
+                            <div className="text-[12px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
                               {patient.condition}
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-[12px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
+                            <div className="text-[12px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
                               {patient.lastVisit}
                             </div>
-                            <div className="text-[11px] text-[#A8EDDF] font-[family-name:var(--font-body)]">
+                            <div className="text-[11px] text-[var(--primary-accent)] font-[family-name:var(--font-body)]">
                               {patient.hospital}
                             </div>
                           </div>
@@ -244,15 +266,16 @@ export default function DashboardShowcase() {
 
                   {/* AI Insights - 40% */}
                   <div className="flex-[2]">
-                    <h3 className="text-[16px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] mb-4">
-                      AI Insights
+                    <h3 className="text-[16px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] mb-4 flex items-center gap-2">
+                      <span className="text-[var(--primary-accent)]">✨</span> AI Insights
                     </h3>
-                    <div className="bg-[#F7F9FC] rounded-xl border-l-4 border-[#A8EDDF] p-4 space-y-4">
+                    <div className="bg-[var(--background)]/50 rounded-xl border border-[var(--border-color)] border-l-4 border-l-[var(--secondary-accent)] p-4 space-y-4 shadow-[inset_0_0_20px_var(--primary-accent)]/5">
                       {aiInsights.map((insight, i) => (
                         <div
                           key={i}
-                          className="text-[13px] text-[#1A2332] font-[family-name:var(--font-body)] leading-relaxed"
+                          className="text-[13px] text-[var(--foreground)] font-[family-name:var(--font-body)] leading-relaxed relative pl-3"
                         >
+                          <span className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-[var(--primary-accent)] shadow-[0_0_5px_var(--primary-accent)]" />
                           {insight}
                         </div>
                       ))}
@@ -275,7 +298,7 @@ export default function DashboardShowcase() {
             <path
               d="M0 40 L200 40 L250 20 L450 60 L700 20 L950 60 L1100 40 L1200 40"
               fill="none"
-              stroke="rgba(168,237,223,0.3)"
+              stroke="var(--border-color)"
               strokeWidth="2"
             />
             {/* Glowing Dot Animation */}
@@ -283,7 +306,8 @@ export default function DashboardShowcase() {
               cx="0"
               cy="40"
               r="6"
-              fill="#A8EDDF"
+              fill="var(--primary-accent)"
+              style={{ filter: "drop-shadow(0 0 8px var(--primary-accent))" }}
               animate={{
                 cx: [0, 200, 250, 450, 700, 950, 1100, 1200],
               }}

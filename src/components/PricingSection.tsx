@@ -2,6 +2,7 @@
 
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef, useState } from "react";
+import Link from "next/link";
 
 const clinicFeatures = [
   "Up to 5 doctors",
@@ -31,9 +32,9 @@ const enterpriseFeatures = [
   "On-premise deployment option",
 ];
 
-function Checkmark({ color = "#A8EDDF" }: { color?: string }) {
+function Checkmark({ color = "var(--primary-accent)" }: { color?: string }) {
   return (
-    <svg className="w-4 h-4 flex-shrink-0" fill={color} viewBox="0 0 20 20">
+    <svg className="w-4 h-4 flex-shrink-0" fill={color} viewBox="0 0 20 20" style={{ filter: `drop-shadow(0 0 3px ${color})` }}>
       <path
         fillRule="evenodd"
         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -70,12 +71,12 @@ function PricingCard({
   return (
     <motion.div
       ref={ref}
-      className={`relative rounded-[24px] p-8 ${
+      className={`relative rounded-[24px] p-8 transition-transform duration-300 ${
         isFeatured
-          ? "bg-white border-2 border-transparent shadow-[0_20px_60px_rgba(168,237,223,0.25)] scale-[1.04] z-10"
+          ? "bg-[var(--background-alt)] border-2 border-[var(--primary-accent)]/40 shadow-[0_20px_60px_var(--primary-accent)]/15 scale-[1.04] z-10"
           : isDark
-          ? "bg-[#1A2332]"
-          : "bg-white border border-[rgba(168,237,223,0.4)]"
+          ? "bg-[var(--background)] border border-[var(--secondary-accent)]/40"
+          : "bg-[var(--background)] border border-[var(--primary-accent)]/15"
       }`}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -84,7 +85,7 @@ function PricingCard({
       {/* Most Popular Badge */}
       {isFeatured && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className="inline-block px-4 py-1.5 rounded-full text-[12px] font-bold text-white bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF]">
+          <span className="inline-block px-4 py-1.5 rounded-full text-[12px] font-bold text-[var(--background)] bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] shadow-[0_0_15px_var(--secondary-accent)]/50">
             Most Popular
           </span>
         </div>
@@ -93,7 +94,7 @@ function PricingCard({
       {/* Title */}
       <h3
         className={`text-[24px] font-bold font-[family-name:var(--font-heading)] ${
-          isDark ? "text-white" : "text-[#1A2332]"
+          isDark ? "text-[var(--foreground)]" : "text-[var(--foreground)]"
         }`}
       >
         {title}
@@ -103,14 +104,14 @@ function PricingCard({
       <div className="mt-4 flex items-baseline gap-1">
         <span
           className={`text-[40px] font-bold font-[family-name:var(--font-heading)] ${
-            isDark ? "text-white" : "text-[#1A2332]"
+            isDark ? "text-[var(--foreground)]" : "text-[var(--foreground)]"
           }`}
         >
           {price}
         </span>
         <span
           className={`text-[14px] font-[family-name:var(--font-body)] ${
-            isDark ? "text-[#8A9BB0]" : "text-[#8A9BB0]"
+            isDark ? "text-[var(--text-muted)]" : "text-[var(--text-muted)]"
           }`}
         >
           /month
@@ -120,7 +121,7 @@ function PricingCard({
       {/* Description */}
       <p
         className={`mt-2 text-[14px] font-[family-name:var(--font-body)] ${
-          isDark ? "text-[#8A9BB0]" : "text-[#8A9BB0]"
+          isDark ? "text-[var(--text-muted)]" : "text-[var(--text-muted)]"
         }`}
       >
         {description}
@@ -130,11 +131,9 @@ function PricingCard({
       <ul className="mt-8 space-y-3">
         {features.map((feature) => (
           <li key={feature} className="flex items-center gap-3">
-            <Checkmark color={isDark ? "#C9A96E" : "#A8EDDF"} />
+            <Checkmark color={isDark ? "var(--gold)" : "var(--primary-accent)"} />
             <span
-              className={`text-[14px] font-[family-name:var(--font-body)] ${
-                isDark ? "text-[#E0E0E0]" : "text-[#1A2332]"
-              }`}
+              className={`text-[14px] font-[family-name:var(--font-body)] text-[var(--foreground)]`}
             >
               {feature}
             </span>
@@ -143,17 +142,19 @@ function PricingCard({
       </ul>
 
       {/* CTA Button */}
+      <Link href="/login">
       <button
         className={`w-full mt-8 h-[48px] rounded-full font-semibold text-[15px] font-[family-name:var(--font-body)] transition-all duration-300 ${
           ctaType === "gradient"
-            ? "bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] text-white hover:shadow-lg hover:-translate-y-0.5"
+            ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] hover:shadow-[0_0_20px_var(--secondary-accent)]/30 hover:-translate-y-0.5"
             : ctaType === "white"
-            ? "bg-transparent border border-white text-white hover:bg-white/10"
-            : "bg-transparent border border-[#A8EDDF] text-[#1A2332] hover:bg-[#A8EDDF]/10"
+            ? "bg-transparent border border-[var(--foreground)] text-[var(--foreground)] hover:bg-[var(--foreground)]/10 hover:shadow-[0_0_15px_var(--foreground)]/10"
+            : "bg-transparent border border-[var(--primary-accent)] text-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/10 hover:shadow-[0_0_15px_var(--primary-accent)]/20"
         }`}
       >
         {ctaText}
       </button>
+      </Link>
     </motion.div>
   );
 }
@@ -161,10 +162,10 @@ function PricingCard({
 function FloatingBubbles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-20 left-[5%] w-32 h-32 rounded-full bg-[#F2C4CE] opacity-[0.07] animate-float-bubble-1" />
-      <div className="absolute top-40 right-[10%] w-48 h-48 rounded-full bg-[#A8EDDF] opacity-[0.07] animate-float-bubble-2" />
-      <div className="absolute bottom-20 left-[20%] w-28 h-28 rounded-full bg-[#F2C4CE] opacity-[0.07] animate-float-bubble-3" />
-      <div className="absolute bottom-40 right-[25%] w-36 h-36 rounded-full bg-[#A8EDDF] opacity-[0.07] animate-float-bubble-1" />
+      <div className="absolute top-20 left-[5%] w-32 h-32 rounded-full bg-[var(--primary-accent)] opacity-[0.05] animate-float-bubble-1 filter blur-[50px]" />
+      <div className="absolute top-40 right-[10%] w-48 h-48 rounded-full bg-[var(--secondary-accent)] opacity-[0.05] animate-float-bubble-2 filter blur-[60px]" />
+      <div className="absolute bottom-20 left-[20%] w-28 h-28 rounded-full bg-[var(--gold)] opacity-[0.05] animate-float-bubble-3 filter blur-[40px]" />
+      <div className="absolute bottom-40 right-[25%] w-36 h-36 rounded-full bg-[var(--primary-accent)] opacity-[0.05] animate-float-bubble-1 filter blur-[50px]" />
     </div>
   );
 }
@@ -178,7 +179,7 @@ export default function PricingSection() {
   const hospitalPrice = isAnnual ? "₹15,999" : "₹19,999";
 
   return (
-    <section className="relative w-full bg-[#F7F9FC] py-[120px] overflow-hidden">
+    <section className="relative w-full bg-[var(--background)] py-[120px] overflow-hidden border-t border-[var(--border-color)]">
       <FloatingBubbles />
 
       <div className="relative z-10 container mx-auto px-6">
@@ -190,13 +191,13 @@ export default function PricingSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-[11px] font-bold tracking-[0.2em] text-[#A8EDDF] uppercase">
+          <span className="text-[11px] font-bold tracking-[0.2em] text-[var(--primary-accent)] uppercase">
             PRICING
           </span>
         </motion.div>
 
         <motion.h2
-          className="text-[40px] lg:text-[56px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] text-center mt-4"
+          className="text-[40px] lg:text-[56px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] text-center mt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -205,7 +206,7 @@ export default function PricingSection() {
         </motion.h2>
 
         <motion.p
-          className="text-[18px] lg:text-[20px] text-[#8A9BB0] font-[family-name:var(--font-body)] text-center mt-4"
+          className="text-[18px] lg:text-[20px] text-[var(--text-muted)] font-[family-name:var(--font-body)] text-center mt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -222,29 +223,29 @@ export default function PricingSection() {
         >
           <span
             className={`text-[14px] font-[family-name:var(--font-body)] ${
-              !isAnnual ? "text-[#1A2332] font-semibold" : "text-[#8A9BB0]"
+              !isAnnual ? "text-[var(--foreground)] font-semibold" : "text-[var(--text-muted)]"
             }`}
           >
             Monthly
           </span>
           <button
             onClick={() => setIsAnnual(!isAnnual)}
-            className="relative w-14 h-7 rounded-full bg-[rgba(168,237,223,0.3)] transition-colors duration-300"
+            className="relative w-14 h-7 rounded-full bg-[var(--background-alt)] border border-[var(--primary-accent)]/30 transition-colors duration-300 shadow-inner"
           >
             <motion.div
-              className="absolute top-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF]"
+              className="absolute top-1 w-5 h-5 rounded-full bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] shadow-[0_0_8px_var(--secondary-accent)]/60"
               animate={{ left: isAnnual ? "calc(100% - 22px)" : "4px" }}
               transition={{ duration: 0.2 }}
             />
           </button>
           <span
             className={`text-[14px] font-[family-name:var(--font-body)] ${
-              isAnnual ? "text-[#1A2332] font-semibold" : "text-[#8A9BB0]"
+              isAnnual ? "text-[var(--foreground)] font-semibold" : "text-[var(--text-muted)]"
             }`}
           >
             Annual
           </span>
-          <span className="ml-2 px-2 py-0.5 rounded-full text-[11px] font-medium text-white bg-[#C9A96E]">
+          <span className="ml-2 px-2 py-0.5 rounded-full text-[11px] font-medium text-[var(--background)] bg-[var(--gold)] shadow-[0_0_10px_var(--gold)]/40">
             Save 20%
           </span>
         </motion.div>
@@ -257,7 +258,7 @@ export default function PricingSection() {
               price={clinicPrice}
               description="For independent clinics and small practices"
               features={clinicFeatures}
-              ctaText="Start Free Trial"
+              ctaText="Get Started"
               ctaType="ghost"
               index={0}
             />
@@ -269,7 +270,7 @@ export default function PricingSection() {
               description="For mid-size hospitals and multi-branch clinics"
               features={hospitalFeatures}
               isFeatured
-              ctaText="Start Free Trial"
+              ctaText="Get Started"
               ctaType="gradient"
               index={1}
             />

@@ -92,14 +92,14 @@ export default function SocialProofBar() {
   return (
     <section
       ref={ref}
-      className="w-full bg-[#F7F9FC] border-y border-[rgba(168,237,223,0.3)]"
+      className="w-full bg-[var(--background-alt)]/50 backdrop-blur-md border-y border-[var(--primary-accent)]/10"
     >
       <div className="h-[96px] flex items-center justify-center gap-8 lg:gap-16 px-6">
         {stats.map((stat, index) => (
           <div key={stat.label} className="flex items-center gap-8 lg:gap-16">
             <div className="flex flex-col items-center text-center">
               <motion.span
-                className="text-[28px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] bg-clip-text text-transparent"
+                className="text-[28px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] bg-clip-text text-transparent drop-shadow-[0_0_10px_var(--primary-accent)]/30"
                 initial={{ opacity: 0, y: 10 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -111,7 +111,7 @@ export default function SocialProofBar() {
                 />
               </motion.span>
               <motion.span
-                className="text-[13px] text-[#8A9BB0] font-[family-name:var(--font-body)] mt-1 whitespace-nowrap"
+                className="text-[13px] text-[var(--text-muted)] font-[family-name:var(--font-body)] mt-1 whitespace-nowrap"
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
@@ -121,7 +121,7 @@ export default function SocialProofBar() {
             </div>
             {/* Vertical Divider */}
             {index < stats.length - 1 && (
-              <div className="w-px h-8 bg-[rgba(168,237,223,0.4)] hidden sm:block" />
+              <div className="w-px h-8 bg-[var(--primary-accent)]/20 hidden sm:block" />
             )}
           </div>
         ))}
@@ -134,21 +134,21 @@ function Marquee() {
   const duplicatedNames = [...hospitalNames, ...hospitalNames, ...hospitalNames];
 
   return (
-    <div className="w-full bg-[#F7F9FC] pb-4 pt-2">
+    <div className="w-full bg-[var(--background)] pb-4 pt-2">
       <div className="relative overflow-hidden mx-auto max-w-4xl">
         {/* Fade Edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#F7F9FC] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#F7F9FC] to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--background)] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[var(--background)] to-transparent z-10 pointer-events-none" />
 
         {/* Marquee Container */}
         <div className="marquee-container">
           {duplicatedNames.map((name, index) => (
             <span
               key={index}
-              className="text-[13px] text-[#8A9BB0] font-[family-name:var(--font-body)] inline-flex items-center gap-4"
+              className="text-[13px] text-[var(--text-muted)] font-[family-name:var(--font-body)] inline-flex items-center gap-4 px-4"
             >
               {name}
-              <span className="w-1 h-1 rounded-full bg-[#A8EDDF] flex-shrink-0" />
+              <span className="w-1 h-1 rounded-full bg-[var(--primary-accent)] flex-shrink-0 shadow-[0_0_5px_var(--primary-accent)]/60" />
             </span>
           ))}
         </div>

@@ -62,14 +62,14 @@ const features = [
 function VitalsCard1() {
   return (
     <motion.div
-      className="absolute -top-4 left-4 glass rounded-2xl px-5 py-3"
+      className="absolute -top-4 left-4 rounded-2xl px-5 py-3 bg-[var(--background)]/60 backdrop-blur-md border border-[var(--border-color)] shadow-[0_0_20px_var(--border-color)]"
       variants={cardFloat1}
       animate="float"
     >
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-[#A8EDDF]" />
-        <span className="text-[13px] font-[family-name:var(--font-body)] text-[#1A2332]">
-          O2 Saturation — <strong>98%</strong>
+        <span className="w-2 h-2 rounded-full bg-[var(--primary-accent)] shadow-[0_0_8px_var(--primary-accent)]" />
+        <span className="text-[13px] font-[family-name:var(--font-body)] text-[var(--foreground)]">
+          O2 Saturation — <strong className="font-bold">98%</strong>
         </span>
       </div>
     </motion.div>
@@ -79,19 +79,19 @@ function VitalsCard1() {
 function VitalsCard2() {
   return (
     <motion.div
-      className="absolute bottom-8 right-4 glass rounded-2xl px-5 py-3"
+      className="absolute bottom-8 right-4 rounded-2xl px-5 py-3 bg-[var(--background)]/60 backdrop-blur-md border border-[var(--secondary-accent)]/30 shadow-[0_0_20px_var(--secondary-accent)]/20"
       variants={cardFloat2}
       animate="float"
     >
       <div className="flex items-center gap-2">
-        <span className="text-[13px] font-[family-name:var(--font-body)] text-[#1A2332]">
-          Heart Rate — <strong>72 BPM</strong>
+        <span className="text-[13px] font-[family-name:var(--font-body)] text-[var(--foreground)]">
+          Heart Rate — <strong className="font-bold">72 BPM</strong>
         </span>
-        <svg width="40" height="16" viewBox="0 0 40 16" className="opacity-60">
+        <svg width="40" height="16" viewBox="0 0 40 16" className="opacity-80 drop-shadow-[0_0_5px_var(--secondary-accent)]">
           <path
             d="M0 8 L5 8 L7 3 L10 13 L13 6 L16 10 L19 8 L22 8 L25 4 L28 12 L31 7 L34 11 L37 8 L40 8"
             fill="none"
-            stroke="#F2C4CE"
+            stroke="var(--secondary-accent)"
             strokeWidth="1.5"
           />
         </svg>
@@ -103,15 +103,15 @@ function VitalsCard2() {
 function VitalsCard3() {
   return (
     <motion.div
-      className="absolute top-1/2 -translate-y-1/2 right-8 glass rounded-2xl px-5 py-3"
+      className="absolute top-1/2 -translate-y-1/2 right-8 rounded-2xl px-5 py-3 bg-[var(--background)]/60 backdrop-blur-md border border-[var(--gold)]/30 shadow-[0_0_20px_var(--gold)]/10"
       variants={cardFloat3}
       animate="float"
     >
       <div className="flex items-center gap-2">
-        <span className="text-[13px] font-[family-name:var(--font-body)] text-[#1A2332]">
+        <span className="text-[13px] font-[family-name:var(--font-body)] text-[var(--foreground)]">
           AI Scan Complete
         </span>
-        <span className="text-[#C9A96E]">✓</span>
+        <span className="text-[var(--gold)] drop-shadow-[0_0_5px_var(--gold)]">✓</span>
       </div>
     </motion.div>
   );
@@ -123,7 +123,7 @@ function Soundwave() {
       {[0.3, 0.6, 1, 0.7, 0.4].map((height, i) => (
         <motion.div
           key={i}
-          className="w-0.5 bg-[#A8EDDF] rounded-full"
+          className="w-0.5 bg-[var(--primary-accent)] rounded-full shadow-[0_0_8px_var(--primary-accent)]"
           animate={{
             height: [`${height * 12}px`, `${height * 16}px`, `${height * 12}px`],
           }}
@@ -152,14 +152,14 @@ export default function HEALAISection() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/90 to-white/85" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--background-alt)] via-[var(--background)]/95 to-[var(--background)]/90" />
       </div>
 
       <div className="relative z-10 flex flex-col lg:flex-row">
         {/* LEFT COLUMN - Visual */}
-        <div className="relative w-full lg:w-1/2 bg-[#F7F9FC] py-[120px] flex items-center justify-center overflow-hidden">
+        <div className="relative w-full lg:w-1/2 bg-transparent py-[120px] flex items-center justify-center overflow-hidden">
           {/* Radial Glow Behind */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(242,196,206,0.2),transparent_60%)]] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary-accent),transparent_60%)] opacity-10 pointer-events-none" />
 
           {/* 3D Lung Illustration with Float */}
           <motion.div
@@ -183,7 +183,7 @@ export default function HEALAISection() {
         </div>
 
         {/* RIGHT COLUMN - Content */}
-        <div className="relative w-full lg:w-1/2 bg-[#FFFFFF] py-[120px] px-6 lg:px-16">
+        <div className="relative w-full lg:w-1/2 bg-transparent py-[120px] px-6 lg:px-16">
           <div className="max-w-lg mx-auto lg:mx-0">
             {/* Label */}
             <motion.div
@@ -192,14 +192,14 @@ export default function HEALAISection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5 }}
             >
-              <span className="text-[11px] font-bold tracking-[0.2em] text-[#A8EDDF] uppercase">
+              <span className="text-[11px] font-bold tracking-[0.2em] text-[var(--primary-accent)] uppercase drop-shadow-[0_0_8px_var(--primary-accent)]/40">
                 MEET HEAL
               </span>
             </motion.div>
 
             {/* Headline */}
             <motion.h2
-              className="text-[40px] lg:text-[56px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] leading-tight mt-4"
+              className="text-[40px] lg:text-[56px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] leading-tight mt-4"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -209,7 +209,7 @@ export default function HEALAISection() {
 
             {/* Subtext */}
             <motion.p
-              className="text-[16px] lg:text-[18px] text-[#8A9BB0] font-[family-name:var(--font-body)] leading-[1.8] mt-6"
+              className="text-[16px] lg:text-[18px] text-[var(--text-muted)] font-[family-name:var(--font-body)] leading-[1.8] mt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -228,8 +228,8 @@ export default function HEALAISection() {
             >
               {features.map((feature) => (
                 <div key={feature} className="flex items-start gap-3">
-                  <span className="text-[#A8EDDF] text-lg mt-0.5">✓</span>
-                  <span className="text-[15px] text-[#1A2332] font-[family-name:var(--font-body)]">
+                  <span className="text-[var(--primary-accent)] text-lg mt-0.5 drop-shadow-[0_0_5px_var(--primary-accent)]">✓</span>
+                  <span className="text-[15px] text-[var(--foreground)] font-[family-name:var(--font-body)]">
                     {feature}
                   </span>
                 </div>
@@ -238,15 +238,15 @@ export default function HEALAISection() {
 
             {/* Chat Preview UI */}
             <motion.div
-              className="mt-10 glass rounded-2xl p-5"
+              className="mt-10 bg-[var(--background-alt)]/80 backdrop-blur-md rounded-2xl p-5 border border-[var(--border-color)] shadow-[0_0_30px_var(--border-color)]"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               {/* Doctor Message */}
               <div className="flex justify-end mb-4">
-                <div className="bg-[#F7F9FC] rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%]">
-                  <p className="text-[13px] text-[#1A2332] font-[family-name:var(--font-body)]">
+                <div className="bg-[var(--background)] border border-[var(--border-color)] rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] shadow-sm">
+                  <p className="text-[13px] text-[var(--foreground)] font-[family-name:var(--font-body)]">
                     What are the risk factors for this patient&apos;s recent BP
                     spike?
                   </p>
@@ -255,8 +255,8 @@ export default function HEALAISection() {
 
               {/* HEAL Message */}
               <div className="flex justify-start mb-3">
-                <div className="bg-[#F7F9FC] rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border-l-2 border-[#A8EDDF]">
-                  <p className="text-[13px] text-[#1A2332] font-[family-name:var(--font-body)]">
+                <div className="bg-[var(--secondary-accent)]/10 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] border-l-2 border-[var(--secondary-accent)] shadow-[inset_0_0_15px_var(--secondary-accent)]/10">
+                  <p className="text-[13px] text-[var(--foreground)] font-[family-name:var(--font-body)]">
                     Based on 3 prior visits and current vitals, elevated sodium
                     intake and stress markers suggest hypertensive episode.
                     Recommend 48hr monitoring and dietary review.
@@ -270,9 +270,9 @@ export default function HEALAISection() {
                 <input
                   type="text"
                   placeholder="Ask HEAL anything..."
-                  className="flex-1 h-10 px-4 rounded-full bg-white border border-[rgba(168,237,223,0.4)] text-[14px] font-[family-name:var(--font-body)] text-[#1A2332] placeholder-[#8A9BB0] focus:outline-none focus:border-[#A8EDDF]"
+                  className="flex-1 h-10 px-4 rounded-full bg-[var(--background)] border border-[var(--border-color)] text-[14px] font-[family-name:var(--font-body)] text-[var(--foreground)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary-accent)] focus:shadow-[0_0_15px_var(--primary-accent)]/20 transition-all"
                 />
-                <button className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F2C4CE] to-[#A8EDDF] flex items-center justify-center text-white text-lg">
+                <button className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] text-lg hover:shadow-[0_0_15px_var(--secondary-accent)]/50 transition-all hover:-translate-y-0.5">
                   →
                 </button>
               </div>

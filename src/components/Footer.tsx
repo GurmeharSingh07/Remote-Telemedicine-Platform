@@ -21,10 +21,10 @@ const companyLinks = [
 ];
 
 const complianceBadges = [
-  { label: "ABDM Certified", color: "#A8EDDF", icon: "🏥" },
-  { label: "NHA Partner", color: "#C9A96E", icon: "🤝" },
-  { label: "ISO 27001", color: "#8A9BB0", icon: "🔒" },
-  { label: "HIPAA Aligned", color: "#6B7B8A", icon: "📋" },
+  { label: "ABDM Certified", color: "var(--primary-accent)", icon: "🏥" },
+  { label: "NHA Partner", color: "var(--gold)", icon: "🤝" },
+  { label: "ISO 27001", color: "var(--text-muted)", icon: "🔒" },
+  { label: "HIPAA Aligned", color: "var(--text-muted)", icon: "📋" },
 ];
 
 function SocialIcon({ name }: { name: string }) {
@@ -37,7 +37,7 @@ function SocialIcon({ name }: { name: string }) {
   return (
     <a
       href="#"
-      className="w-9 h-9 rounded-full border border-[rgba(168,237,223,0.4)] flex items-center justify-center text-[#A8EDDF] hover:bg-gradient-to-br hover:from-[#F2C4CE] hover:to-[#A8EDDF] hover:text-white hover:border-transparent transition-all duration-300"
+      className="w-9 h-9 rounded-full border border-[var(--primary-accent)]/40 flex items-center justify-center text-[var(--primary-accent)] hover:bg-gradient-to-br hover:from-[var(--primary-accent)] hover:to-[var(--secondary-accent)] hover:text-[var(--background)] hover:border-transparent transition-all duration-300 shadow-[0_0_10px_var(--primary-accent)]/10 hover:shadow-[0_0_15px_var(--secondary-accent)]/40"
     >
       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
         <path d={icons[name]} />
@@ -50,7 +50,7 @@ function FooterLink({ children }: { children: React.ReactNode }) {
   return (
     <a
       href="#"
-      className="text-[14px] text-[#8A9BB0] hover:text-[#A8EDDF] transition-colors duration-200 font-[family-name:var(--font-body)]"
+      className="text-[14px] text-[var(--text-muted)] hover:text-[var(--primary-accent)] hover:drop-shadow-[0_0_8px_var(--primary-accent)] transition-all duration-300 font-[family-name:var(--font-body)]"
     >
       {children}
     </a>
@@ -78,12 +78,15 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#FFFFFF] border-t border-[rgba(168,237,223,0.3)]">
+    <footer className="w-full bg-[var(--background)] border-t border-[var(--border-color)] relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(ellipse_at_top,var(--primary-accent),transparent_70%)] opacity-10 pointer-events-none" />
+
       {/* Newsletter Bar */}
-      <div className="bg-[#F7F9FC] border-y border-[rgba(168,237,223,0.3)]">
+      <div className="bg-[var(--background-alt)] border-y border-[var(--border-color)] backdrop-blur-md relative z-10">
         <div className="container mx-auto px-6 py-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-            <span className="text-[16px] font-bold text-[#1A2332] font-[family-name:var(--font-body)]">
+            <span className="text-[16px] font-bold text-[var(--foreground)] font-[family-name:var(--font-body)]">
               Get healthcare tech insights weekly.
             </span>
             <form
@@ -95,11 +98,11 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full lg:w-72 h-11 px-4 rounded-[16px] bg-white border border-[rgba(168,237,223,0.3)] text-[14px] font-[family-name:var(--font-body)] text-[#1A2332] placeholder-[#8A9BB0] focus:outline-none focus:border-[#A8EDDF]"
+                className="w-full lg:w-72 h-11 px-4 rounded-[16px] bg-[var(--background)] border border-[var(--border-color)] text-[14px] font-[family-name:var(--font-body)] text-[var(--foreground)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary-accent)] transition-all"
               />
               <button
                 type="submit"
-                className="h-11 px-6 rounded-[16px] bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] text-white font-semibold text-[14px] font-[family-name:var(--font-body)] whitespace-nowrap hover:shadow-md transition-all"
+                className="h-11 px-6 rounded-[16px] bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] font-semibold text-[14px] font-[family-name:var(--font-body)] whitespace-nowrap hover:-translate-y-0.5 transition-all duration-300 drop-shadow-md"
               >
                 Subscribe
               </button>
@@ -109,14 +112,14 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="container mx-auto px-6 py-20">
+      <div className="container mx-auto px-6 py-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Column 1 - Brand */}
           <div>
-            <div className="text-[22px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] bg-clip-text text-transparent">
+            <div className="text-[24px] font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] bg-clip-text text-transparent drop-shadow-sm">
               HealNet
             </div>
-            <p className="mt-4 text-[14px] text-[#8A9BB0] font-[family-name:var(--font-body)] leading-[1.7] max-w-[200px]">
+            <p className="mt-4 text-[14px] text-[var(--text-muted)] font-[family-name:var(--font-body)] leading-[1.7] max-w-[200px]">
               One Record. Every Doctor. Every Hospital.
             </p>
             <div className="flex items-center gap-3 mt-6">
@@ -128,7 +131,7 @@ export default function Footer() {
 
           {/* Column 2 - Product */}
           <div>
-            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[#1A2332] uppercase mb-4">
+            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[var(--foreground)] uppercase mb-4">
               Product
             </h4>
             <ul className="space-y-3">
@@ -142,7 +145,7 @@ export default function Footer() {
 
           {/* Column 3 - Company */}
           <div>
-            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[#1A2332] uppercase mb-4">
+            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[var(--foreground)] uppercase mb-4">
               Company
             </h4>
             <ul className="space-y-3">
@@ -156,7 +159,7 @@ export default function Footer() {
 
           {/* Column 4 - Compliance */}
           <div>
-            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[#1A2332] uppercase mb-4">
+            <h4 className="text-[12px] font-bold tracking-[0.15em] text-[var(--foreground)] uppercase mb-4">
               Trusted & Certified
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -174,28 +177,28 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[rgba(168,237,223,0.2)]">
+      <div className="border-t border-[var(--border-color)] relative z-10">
         <div className="container mx-auto px-6 py-6">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-[13px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-[13px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
             <span>
               © 2025 HealNet Technologies Pvt. Ltd. · Made in India 🇮🇳
             </span>
             <div className="flex items-center gap-6">
               <a
                 href="#"
-                className="hover:text-[#A8EDDF] transition-colors"
+                className="hover:text-[var(--primary-accent)] transition-colors"
               >
                 Privacy Policy
               </a>
               <a
                 href="#"
-                className="hover:text-[#A8EDDF] transition-colors"
+                className="hover:text-[var(--primary-accent)] transition-colors"
               >
                 Terms of Service
               </a>
               <a
                 href="#"
-                className="hover:text-[#A8EDDF] transition-colors"
+                className="hover:text-[var(--primary-accent)] transition-colors"
               >
                 Cookie Policy
               </a>

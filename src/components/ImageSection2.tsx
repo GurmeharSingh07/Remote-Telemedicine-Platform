@@ -23,7 +23,7 @@ export default function ImageSection2() {
           priority
         />
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-l from-[#0a0a0a]/90 via-[#0a0a0a]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-l from-[var(--background)]/90 via-[var(--background)]/60 to-transparent" />
       </div>
 
       {/* Content - Right aligned */}
@@ -36,7 +36,7 @@ export default function ImageSection2() {
         >
           {/* Label */}
           <motion.span
-            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[#A8EDDF] uppercase mb-6"
+            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[var(--primary-accent)] uppercase mb-6 drop-shadow-[0_0_8px_var(--primary-accent)]/50"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -46,21 +46,21 @@ export default function ImageSection2() {
 
           {/* Headline */}
           <motion.h2
-            className="text-[56px] lg:text-[72px] font-bold text-white leading-[1.1] tracking-tight"
+            className="text-[56px] lg:text-[72px] font-bold text-[var(--foreground)] leading-[1.1] tracking-tight"
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             HEAL AI.
             <br />
-            <span className="text-transparent bg-gradient-to-r from-[#A8EDDF] to-[#F2C4CE] bg-clip-text">
+            <span className="text-transparent bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] bg-clip-text drop-shadow-[0_0_15px_var(--secondary-accent)]/30">
               Clinician's Edge.
             </span>
           </motion.h2>
 
           {/* Subtext */}
           <motion.p
-            className="text-[18px] text-[#8A9BB0] mt-6 ml-auto max-w-md leading-relaxed"
+            className="text-[18px] text-[var(--text-muted)] mt-6 ml-auto max-w-md leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -77,16 +77,16 @@ export default function ImageSection2() {
             transition={{ duration: 0.6, delay: 0.6 }}
           >
             <div className="text-center">
-              <div className="text-[36px] font-bold text-white">1.2M+</div>
-              <div className="text-[12px] text-[#8A9BB0] tracking-widest uppercase">Records Analyzed</div>
+              <div className="text-[36px] font-bold text-[var(--foreground)]">1.2M+</div>
+              <div className="text-[12px] text-[var(--text-muted)] tracking-widest uppercase">Records Analyzed</div>
             </div>
             <div className="text-center">
-              <div className="text-[36px] font-bold text-white">98%</div>
-              <div className="text-[12px] text-[#8A9BB0] tracking-widest uppercase">Accuracy</div>
+              <div className="text-[36px] font-bold text-[var(--foreground)]">98%</div>
+              <div className="text-[12px] text-[var(--text-muted)] tracking-widest uppercase">Accuracy</div>
             </div>
             <div className="text-center">
-              <div className="text-[36px] font-bold text-white">48</div>
-              <div className="text-[12px] text-[#8A9BB0] tracking-widest uppercase">Hospitals Live</div>
+              <div className="text-[36px] font-bold text-[var(--foreground)]">48</div>
+              <div className="text-[12px] text-[var(--text-muted)] tracking-widest uppercase">Hospitals Live</div>
             </div>
           </motion.div>
         </motion.div>
@@ -98,8 +98,8 @@ export default function ImageSection2() {
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2">
-          <div className="w-1 h-2 bg-white/60 rounded-full" />
+        <div className="w-6 h-10 rounded-full border-2 border-[var(--foreground)]/30 flex justify-center pt-2">
+          <div className="w-1 h-2 bg-[var(--foreground)]/60 rounded-full" />
         </div>
       </motion.div>
     </section>
