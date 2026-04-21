@@ -50,12 +50,12 @@ function CityNodeMarker({ city, onHover }: { city: CityNode; onHover: (city: Cit
     >
       {/* Outer Ring */}
       <motion.div
-        className="w-6 h-6 rounded-full border-2 border-[#A8EDDF] opacity-20"
+        className="w-6 h-6 rounded-full border-2 border-[var(--primary-accent)] opacity-30 shadow-[0_0_10px_var(--primary-accent)]/50"
         animate={{ scale: [1, 1.3, 1] }}
         transition={{ duration: 2, repeat: Infinity }}
       />
       {/* Inner Dot */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#A8EDDF]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[var(--primary-accent)] shadow-[0_0_8px_var(--primary-accent)]/90" />
     </div>
   );
 }
@@ -63,23 +63,23 @@ function CityNodeMarker({ city, onHover }: { city: CityNode; onHover: (city: Cit
 function HoverCard({ city }: { city: CityNode }) {
   return (
     <motion.div
-      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 glass rounded-xl px-4 py-3 min-w-[160px]"
+      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 bg-[var(--background)]/80 backdrop-blur-md rounded-xl px-4 py-3 min-w-[160px] border border-[var(--primary-accent)]/20 shadow-lg"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
     >
-      <div className="text-[14px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] mb-2">
+      <div className="text-[14px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] mb-2">
         {city.name}
       </div>
       <div className="space-y-1">
-        <div className="text-[12px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
-          <span className="text-[#1A2332] font-medium">{city.hospitals}</span> hospitals
+        <div className="text-[12px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
+          <span className="text-[var(--primary-accent)] font-medium">{city.hospitals}</span> hospitals
         </div>
-        <div className="text-[12px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
-          <span className="text-[#1A2332] font-medium">{city.doctors}</span> doctors
+        <div className="text-[12px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
+          <span className="text-[var(--primary-accent)] font-medium">{city.doctors}</span> doctors
         </div>
-        <div className="text-[12px] text-[#8A9BB0] font-[family-name:var(--font-body)]">
-          <span className="text-[#1A2332] font-medium">{city.records}</span> records
+        <div className="text-[12px] text-[var(--text-muted)] font-[family-name:var(--font-body)]">
+          <span className="text-[var(--primary-accent)] font-medium">{city.records}</span> records
         </div>
       </div>
     </motion.div>
@@ -91,9 +91,10 @@ function AnimatedConnectionLine({ path }: { path: string }) {
     <motion.path
       d={path}
       fill="none"
-      stroke="#A8EDDF"
+      stroke="var(--primary-accent)"
       strokeWidth="1"
-      strokeOpacity={0.3}
+      strokeOpacity={0.5}
+      style={{ filter: "drop-shadow(0 0 5px var(--primary-accent))" }}
       initial={{ pathLength: 0 }}
       animate={{ pathLength: [0, 1, 1] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -114,7 +115,7 @@ export default function HospitalNetworkMap() {
   const [hoveredCity, setHoveredCity] = useState<CityNode | null>(null);
 
   return (
-    <section className="relative w-full bg-[#FFFFFF] py-[120px] overflow-hidden">
+    <section className="relative w-full bg-[var(--background)] py-[120px] overflow-hidden border-t border-[var(--border-color)]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -123,7 +124,7 @@ export default function HospitalNetworkMap() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-[#FFFFFF]/90" />
+        <div className="absolute inset-0 bg-[var(--background)] opacity-90" />
       </div>
 
       <div className="relative z-10 container mx-auto px-6">
@@ -135,18 +136,18 @@ export default function HospitalNetworkMap() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-[40px] lg:text-[56px] font-extrabold text-[#1A2332] font-[family-name:var(--font-heading)] tracking-tight">
+          <h2 className="text-[40px] lg:text-[56px] font-extrabold text-[var(--foreground)] font-[family-name:var(--font-heading)] tracking-tight">
             Built for India. Ready for Bharat.
           </h2>
         </motion.div>
 
         <motion.p
-          className="text-[18px] lg:text-[20px] text-[#1A2332]/70 font-semibold font-[family-name:var(--font-body)] text-center mb-16"
+          className="text-[18px] lg:text-[20px] text-[var(--text-muted)] font-semibold font-[family-name:var(--font-body)] text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          HealNet&apos;s network spans <span className="text-[#A8EDDF]">200+ hospitals</span> across <span className="text-[#A8EDDF]">18 states</span> and growing.
+          HealNet&apos;s network spans <span className="text-[var(--primary-accent)]">200+ hospitals</span> across <span className="text-[var(--primary-accent)]">18 states</span> and growing.
         </motion.p>
 
         {/* India Map */}
@@ -155,13 +156,13 @@ export default function HospitalNetworkMap() {
           <svg
             viewBox="0 0 100 80"
             className="w-full h-full"
-            style={{ filter: "drop-shadow(0 8px 30px rgba(168,237,223,0.4))" }}
+            style={{ filter: "drop-shadow(0 8px 30px rgba(13,115,119,0.15))" }}
           >
             {/* Simplified India Map Path */}
             <path
               d="M25,10 L35,8 L45,10 L55,12 L65,15 L75,20 L80,30 L82,40 L80,50 L75,60 L65,65 L55,70 L45,72 L35,70 L25,65 L18,55 L15,45 L18,35 L22,25 Z"
-              fill="#E8F5F0"
-              stroke="#A8EDDF"
+              fill="var(--background-alt)"
+              stroke="var(--primary-accent)"
               strokeWidth="1.5"
             />
 
@@ -173,8 +174,8 @@ export default function HospitalNetworkMap() {
               const path = `M${fromCity.x},${fromCity.y} L${toCity.x},${toCity.y}`;
               return (
                 <g key={i}>
-                  <path d={path} fill="none" stroke="#F2C4CE" strokeWidth="1.5" strokeOpacity={0.7} />
-                  <motion.circle r="2" fill="#A8EDDF">
+                  <path d={path} fill="none" stroke="var(--secondary-accent)" strokeWidth="1.5" strokeOpacity={0.8} />
+                  <motion.circle r="2" fill="var(--primary-accent)" style={{ filter: "drop-shadow(0 0 5px var(--primary-accent))" }}>
                     <animateMotion
                       dur={`${2 + i * 0.3}s`}
                       repeatCount="indefinite"
@@ -194,11 +195,11 @@ export default function HospitalNetworkMap() {
               style={{ left: `${city.x}%`, top: `${city.y}%`, transform: "translate(-50%, -50%)" }}
             >
               <motion.div
-                className="w-8 h-8 rounded-full border-3 border-[#A8EDDF] bg-[#A8EDDF]/20 cursor-pointer"
+                className="w-8 h-8 rounded-full border-3 border-[var(--primary-accent)] bg-[var(--primary-accent)]/20 cursor-pointer shadow-[0_0_15px_var(--primary-accent)]/30"
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#A8EDDF] cursor-pointer" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[var(--primary-accent)] cursor-pointer shadow-[0_0_8px_var(--primary-accent)]" />
 
               {/* Hover Card */}
               {hoveredCity?.name === city.name && <HoverCard city={city} />}
@@ -215,10 +216,10 @@ export default function HospitalNetworkMap() {
         >
           {stats.map((stat, i) => (
             <div key={stat.label} className="text-center">
-              <div className="text-[48px] lg:text-[56px] font-extrabold font-[family-name:var(--font-heading)] text-[#1A2332]">
+              <div className="text-[48px] lg:text-[56px] font-extrabold font-[family-name:var(--font-heading)] text-[var(--foreground)] drop-shadow-sm">
                 {stat.value}
               </div>
-              <div className="text-[16px] font-semibold text-[#A8EDDF] font-[family-name:var(--font-body)] mt-1 uppercase tracking-wide">
+              <div className="text-[16px] font-semibold text-[var(--primary-accent)] font-[family-name:var(--font-body)] mt-1 uppercase tracking-wide">
                 {stat.label}
               </div>
             </div>

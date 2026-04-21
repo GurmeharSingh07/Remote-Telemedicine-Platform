@@ -69,24 +69,24 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
   return (
     <motion.div
       ref={ref}
-      className="group relative bg-[rgba(255,255,255,0.65)] backdrop-blur-[24px] border border-[rgba(168,237,223,0.4)] rounded-[24px] p-8 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(168,237,223,0.2)] transition-all duration-300"
+      className={`group relative glass rounded-[24px] p-8 hover:-translate-y-2 hover:shadow-[0_20px_40px_var(--border-color)] hover:border-[var(--primary-accent)]/40 transition-all duration-300`}
       custom={index}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={cardVariants}
     >
       {/* Icon Circle */}
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F2C4CE] to-[#A8EDDF] flex items-center justify-center text-2xl mb-6">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_var(--secondary-accent)]/30">
         {feature.icon}
       </div>
 
       {/* Title */}
-      <h3 className="text-[20px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] mb-3">
+      <h3 className="text-[20px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] mb-3">
         {feature.title}
       </h3>
 
       {/* Description */}
-      <p className="text-[15px] text-[#8A9BB0] font-[family-name:var(--font-body)] leading-relaxed">
+      <p className="text-[15px] text-[var(--text-muted)] font-[family-name:var(--font-body)] leading-relaxed">
         {feature.description}
       </p>
     </motion.div>
@@ -96,12 +96,13 @@ function FeatureCard({ feature, index }: { feature: Feature; index: number }) {
 function FloatingBubbles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
+  {/* Float bubbles rendered in globals.css now to stay consistent */}
       {/* Bubble 1 - Top Left */}
-      <div className="absolute top-20 left-[10%] w-40 h-40 rounded-full bg-[#F2C4CE] opacity-[0.08] animate-float-bubble-1" />
+      <div className="absolute top-20 left-[10%] w-40 h-40 rounded-full bg-[var(--primary-accent)] opacity-[0.08] animate-float-bubble-1 filter blur-[60px]" />
       {/* Bubble 2 - Middle Right */}
-      <div className="absolute top-40 right-[15%] w-56 h-56 rounded-full bg-[#A8EDDF] opacity-[0.08] animate-float-bubble-2" />
+      <div className="absolute top-40 right-[15%] w-56 h-56 rounded-full bg-[var(--secondary-accent)] opacity-[0.08] animate-float-bubble-2 filter blur-[60px]" />
       {/* Bubble 3 - Bottom Left */}
-      <div className="absolute bottom-20 left-[25%] w-32 h-32 rounded-full bg-[#F2C4CE] opacity-[0.08] animate-float-bubble-3" />
+      <div className="absolute bottom-20 left-[25%] w-32 h-32 rounded-full bg-[var(--primary-accent)] opacity-[0.08] animate-float-bubble-3 filter blur-[60px]" />
     </div>
   );
 }
@@ -111,7 +112,7 @@ export default function FeaturesSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="relative w-full bg-[#FFFFFF] py-[120px] overflow-hidden">
+    <section className="relative w-full bg-[var(--background)] py-[120px] overflow-hidden border-t border-[var(--border-color)]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -120,7 +121,7 @@ export default function FeaturesSection() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-[#FFFFFF]/85" />
+        <div className="absolute inset-0 bg-[var(--background)] opacity-85" />
       </div>
       <FloatingBubbles />
 
@@ -133,14 +134,14 @@ export default function FeaturesSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-[11px] font-bold tracking-[0.2em] text-[#A8EDDF] uppercase">
+          <span className="text-[11px] font-bold tracking-[0.2em] text-[var(--primary-accent)] uppercase">
             THE PLATFORM
           </span>
         </motion.div>
 
         {/* Section Headline */}
         <motion.h2
-          className="text-[40px] lg:text-[56px] font-bold text-[#1A2332] font-[family-name:var(--font-heading)] text-center max-w-[640px] mx-auto leading-tight"
+          className="text-[40px] lg:text-[56px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)] text-center max-w-[640px] mx-auto leading-tight"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -150,7 +151,7 @@ export default function FeaturesSection() {
 
         {/* Subheadline */}
         <motion.p
-          className="text-[18px] lg:text-[20px] text-[#8A9BB0] font-[family-name:var(--font-body)] text-center mt-6"
+          className="text-[18px] lg:text-[20px] text-[var(--text-muted)] font-[family-name:var(--font-body)] text-center mt-6"
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}

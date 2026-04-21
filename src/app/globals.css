@@ -7,34 +7,64 @@ html {
 }
 
 :root {
-  /* HealNet Design Tokens */
-  --background: #FFFFFF;
-  --background-alt: #F7F9FC;
-  --foreground: #1A2332;
+  /* HealNet Design Tokens (Light Theme) - Premium Refined Palette */
+  /* Warm, sophisticated tones with harmonious accents */
 
-  /* Accent Colors */
-  --primary-accent: #F2C4CE;
-  --secondary-accent: #A8EDDF;
-  --tertiary: #D4A89A;
-  --gold: #C9A96E;
+  --background: #F9F7F4;           /* Warm ivory - premium feel */
+  --background-alt: #F0EDE8;       /* Rich warm stone */
+  --foreground: #1A1815;          /* Warm charcoal */
+
+  /* Accent Colors - Harmonious & Refined */
+  --primary-accent: #0D7377;      /* Deep refined teal - trustworthy & modern */
+  --primary-light: #14A3A8;       /* Lighter teal for hovers/accents */
+  --secondary-accent: #5B4B8A;    /* Refined violet - sophisticated */
+  --tertiary: #C2626A;            /* Muted rose - warm & medical */
+  --gold: #B8954A;                /* True gold - premium accent */
 
   /* Text */
-  --text-primary: #1A2332;
+  --text-primary: #1A1815;        /* Warm dark */
+  --text-muted: #6B6560;         /* Warm gray */
+
+  /* Glass & Effects */
+  --glass: rgba(249, 247, 244, 0.85);
+  --gradient-primary: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+
+  /* Borders & Shadows - Sophisticated depth */
+  --border-color: rgba(26, 24, 21, 0.08);
+  --shadow-default: 0 4px 24px rgba(26, 24, 21, 0.06);
+  --shadow-elevated: 0 8px 40px rgba(26, 24, 21, 0.1);
+  --shadow-bloom: 0 20px 50px rgba(13, 115, 119, 0.12);
+
+  /* Radii */
+  --radius-card: 28px;
+  --radius-button: 999px;
+  --radius-panel: 20px;
+}
+
+.dark {
+  /* HealNet Design Tokens (Dark Theme) */
+  --background: #080B10;
+  --background-alt: #131B2A;
+  --foreground: #F3F4F6;
+
+  /* Accent Colors */
+  --primary-accent: #00E5FF;
+  --secondary-accent: #B535F6;
+  --tertiary: #FF007F;
+  --gold: #FFB000;
+
+  /* Text */
+  --text-primary: #F3F4F6;
   --text-muted: #8A9BB0;
 
   /* Glass & Effects */
-  --glass: rgba(255,255,255,0.65);
-  --gradient-primary: linear-gradient(135deg, #F2C4CE, #A8EDDF);
+  --glass: rgba(19, 27, 42, 0.65);
+  --gradient-primary: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
 
   /* Borders & Shadows */
-  --border-color: rgba(168,237,223,0.4);
-  --shadow-default: 0 8px 32px rgba(180,210,220,0.2);
-  --shadow-bloom: 0 16px 48px rgba(180,210,220,0.35);
-
-  /* Radii */
-  --radius-card: 24px;
-  --radius-button: 999px;
-  --radius-panel: 16px;
+  --border-color: rgba(0, 229, 255, 0.15);
+  --shadow-default: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-bloom: 0 16px 48px rgba(0, 229, 255, 0.15);
 }
 
 @theme inline {
@@ -51,7 +81,7 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(180deg, var(--background) 0%, var(--background-alt) 100%);
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
 }
@@ -59,8 +89,8 @@ body {
 /* Grid Pattern Background */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(168,237,223,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(168,237,223,0.03) 1px, transparent 1px);
+    linear-gradient(var(--border-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -78,6 +108,21 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Gradient Animation */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-slow {
+  background-size: 200% auto;
+  animation: gradient-shift 4s ease infinite;
 }
 
 /* Gradient Border */
@@ -176,14 +221,14 @@ body {
 .bubble {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.06;
+  filter: blur(80px);
+  opacity: 0.08;
 }
 
 .bubble-1 {
   width: 500px;
   height: 500px;
-  background: #F2C4CE;
+  background: var(--primary-accent);
   top: 20%;
   left: 10%;
   animation: drift 20s ease-in-out infinite;
@@ -192,7 +237,7 @@ body {
 .bubble-2 {
   width: 400px;
   height: 400px;
-  background: #A8EDDF;
+  background: var(--secondary-accent);
   top: 50%;
   right: 15%;
   animation: drift 25s ease-in-out infinite reverse;
@@ -201,8 +246,22 @@ body {
 .bubble-3 {
   width: 350px;
   height: 350px;
-  background: #F2C4CE;
+  background: var(--tertiary);
   bottom: 10%;
   left: 40%;
   animation: drift 22s ease-in-out infinite;
+}
+
+/* Subtle grain texture overlay for premium feel */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  z-index: 9999;
 }

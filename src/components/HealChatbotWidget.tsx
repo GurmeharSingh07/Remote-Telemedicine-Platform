@@ -49,16 +49,14 @@ const knowledgeBase = [
     response:
       "🚨 *Urgent Attention Needed:* These symptoms can indicate a serious condition. Please visit the nearest emergency facility immediately.",
   },
-  {
-    keywords: ["book", "appointment", "schedule"],
-    response:
-      "You can book an appointment anytime from the ‘Doctors’ section in HealNet. Let me know if you want guidance.",
-  },
-  {
-    keywords: ["cost", "insurance", "price"],
-    response:
-      "You can view pricing, plans, and insurance coverage inside the HealNet Services tab. I can guide you there if needed.",
-  },
+];
+
+const mockResponses = [
+  "Based on your symptoms, I recommend consulting a specialist. Would you like me to find one nearby?",
+  "I’ve analyzed your query. For detailed information, please refer to your health dashboard.",
+  "Your health records show recent activity. Is there something specific you’d like to know?",
+  "I’m here to help with any questions about HealNet. What would you like to explore?",
+  "That’s a great question. Let me provide some general guidance based on your profile.",
 ];
 
 const springVariants: Variants = {

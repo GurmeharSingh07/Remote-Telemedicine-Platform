@@ -3,6 +3,7 @@
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -46,9 +47,9 @@ export default function HeroSection() {
           priority
         />
         {/* Cinematic Dark Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-[#0a0a0a]/60 to-[#0a0a0a]/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/80 via-[var(--background)]/60 to-[var(--background)]/90" />
         {/* Subtle radial glow from center */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(168,237,223,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,var(--primary-accent),transparent_50%)] opacity-15" />
       </div>
 
       {/* Content */}
@@ -62,31 +63,31 @@ export default function HeroSection() {
           {/* Badge */}
           <motion.div
             variants={fadeUpVariants}
-            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-[#A8EDDF]/40 bg-[#A8EDDF]/10 backdrop-blur-sm mb-8"
+            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-[var(--primary-accent)]/40 bg-[var(--primary-accent)]/10 backdrop-blur-sm mb-8 shadow-[0_0_15px_var(--primary-accent)]/20"
           >
-            <span className="w-2 h-2 rounded-full bg-[#A8EDDF] animate-pulse" />
-            <span className="text-[13px] font-medium text-[#A8EDDF] tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-[var(--primary-accent)] animate-pulse shadow-[0_0_8px_var(--primary-accent)]" />
+            <span className="text-[13px] font-medium text-[var(--primary-accent)] tracking-wide">
               Now in Beta · 200+ Hospitals
             </span>
           </motion.div>
 
           {/* Main Headline */}
           <motion.div variants={fadeUpVariants}>
-            <h1 className="text-[48px] md:text-[72px] lg:text-[88px] font-bold tracking-tight leading-[1.05] text-white">
+            <h1 className="text-[48px] md:text-[72px] lg:text-[88px] font-bold tracking-tight leading-[1.05] text-[var(--foreground)]">
               Every Patient.
               <br />
-              <span className="text-transparent bg-gradient-to-r from-[#F2C4CE] via-[#A8EDDF] to-[#F2C4CE] bg-[length:200%_auto] bg-clip-text">
+              <span className="text-transparent bg-gradient-to-r from-[var(--primary-accent)] via-[var(--secondary-accent)] to-[var(--primary-accent)] bg-[length:200%_auto] bg-clip-text animate-gradient-slow drop-shadow-[0_0_15px_var(--secondary-accent)]/30">
                 Every Hospital.
               </span>
               <br />
-              One Platform.
+              HealNet.
             </h1>
           </motion.div>
 
           {/* Subheadline */}
           <motion.p
             variants={fadeUpVariants}
-            className="mt-8 text-[18px] md:text-[22px] text-[#8A9BB0] font-[family-name:var(--font-body)] leading-[1.7] max-w-2xl mx-auto"
+            className="text-[18px] md:text-[22px] text-[var(--text-muted)] mt-8 max-w-2xl mx-auto font-medium font-[family-name:var(--font-body)] leading-relaxed"
           >
             India&apos;s first AI-powered centralized healthcare platform.
             <br className="hidden md:block" />
@@ -98,9 +99,14 @@ export default function HeroSection() {
             variants={fadeUpVariants}
             className="flex flex-wrap items-center justify-center gap-5 mt-12"
           >
+            <Link href="/login">
+              <button className="h-14 px-8 rounded-full bg-[var(--foreground)] text-[var(--background)] font-bold text-[15px] hover:-translate-y-0.5 hover:shadow-[0_0_30px_var(--foreground)]/20 transition-all duration-300">
+                Start Building Free
+              </button>
+            </Link>
             {/* Secondary CTA */}
-            <button className="flex items-center gap-3 h-14 px-8 rounded-full border border-white/30 text-white font-medium text-[15px] hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm">
-              <span className="text-[#A8EDDF]">▶</span>
+            <button className="flex items-center gap-3 h-14 px-8 rounded-full border border-[var(--border-color)] text-[var(--foreground)] font-medium text-[15px] hover:bg-[var(--foreground)]/10 hover:shadow-[0_0_20px_var(--foreground)]/10 transition-all duration-300 backdrop-blur-sm">
+              <span className="text-[var(--primary-accent)] drop-shadow-[0_0_8px_var(--primary-accent)]/60">▶</span>
               Watch Demo
             </button>
           </motion.div>
@@ -117,7 +123,7 @@ export default function HeroSection() {
               { value: "18", label: "States" },
             ].map((stat, i) => (
               <div key={stat.label} className="text-center">
-                <div className="text-[28px] md:text-[32px] font-bold text-white">
+                <div className="text-[28px] md:text-[32px] font-bold text-[var(--foreground)]">
                   {stat.value}
                 </div>
                 <div className="text-[12px] text-[#8A9BB0] tracking-widest uppercase mt-1">
@@ -135,9 +141,9 @@ export default function HeroSection() {
         animate={{ y: [0, 12, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="w-7 h-12 rounded-full border-2 border-white/20 flex justify-center pt-3">
+        <div className="w-7 h-12 rounded-full border-2 border-[var(--foreground)]/20 flex justify-center pt-3">
           <motion.div
-            className="w-1.5 h-3 bg-white/60 rounded-full"
+            className="w-1.5 h-3 bg-[var(--foreground)]/60 rounded-full"
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           />

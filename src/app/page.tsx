@@ -18,9 +18,9 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <SocialProofWithMarquee />
-      <FeaturesSection />
-      <HEALAISection />
       <DashboardShowcase />
+      <HEALAISection />
+      <FeaturesSection />
       <HospitalNetworkMap />
       <ImageSection1 />
       <ImageSection2 />

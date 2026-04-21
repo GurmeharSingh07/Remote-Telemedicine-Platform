@@ -3,6 +3,7 @@
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ImageSection1() {
   const ref = useRef<HTMLDivElement>(null);
@@ -23,7 +24,7 @@ export default function ImageSection1() {
           priority
         />
         {/* Dark Overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/90 via-[#0a0a0a]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--background)]/90 via-[var(--background)]/70 to-transparent" />
       </div>
 
       {/* Content */}
@@ -36,7 +37,7 @@ export default function ImageSection1() {
         >
           {/* Label */}
           <motion.span
-            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[#A8EDDF] uppercase mb-6"
+            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[var(--primary-accent)] uppercase mb-6 drop-shadow-[0_0_8px_var(--primary-accent)]/50"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -46,21 +47,21 @@ export default function ImageSection1() {
 
           {/* Headline */}
           <motion.h2
-            className="text-[56px] lg:text-[72px] font-bold text-white leading-[1.1] tracking-tight"
+            className="text-[56px] lg:text-[72px] font-bold text-[var(--foreground)] leading-[1.1] tracking-tight"
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             One Platform.
             <br />
-            <span className="text-transparent bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] bg-clip-text">
+            <span className="text-transparent bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] bg-clip-text drop-shadow-[0_0_15px_var(--secondary-accent)]/50">
               Infinite Care.
             </span>
           </motion.h2>
 
           {/* Subtext */}
           <motion.p
-            className="text-[18px] text-[#8A9BB0] mt-6 max-w-md leading-relaxed"
+            className="text-[18px] text-[var(--text-muted)] mt-6 max-w-md leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -76,10 +77,12 @@ export default function ImageSection1() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <button className="h-14 px-8 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] text-[#0a0a0a] font-semibold text-[15px] hover:scale-105 transition-transform">
-              Start Free Trial
+            <Link href="/login">
+            <button className="h-14 px-8 rounded-full bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] font-semibold text-[15px] hover:scale-105 hover:shadow-[0_0_20px_var(--secondary-accent)]/40 transition-all">
+              Get Started
             </button>
-            <button className="h-14 px-8 rounded-full border border-white/30 text-white font-medium text-[15px] hover:bg-white/10 transition-colors">
+            </Link>
+            <button className="h-14 px-8 rounded-full border border-[var(--foreground)]/30 text-[var(--foreground)] font-medium text-[15px] hover:bg-[var(--foreground)]/10 hover:shadow-[0_0_15px_var(--foreground)]/10 transition-all">
               Watch Demo
             </button>
           </motion.div>
@@ -92,8 +95,8 @@ export default function ImageSection1() {
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2">
-          <div className="w-1 h-2 bg-white/60 rounded-full" />
+        <div className="w-6 h-10 rounded-full border-2 border-[var(--foreground)]/30 flex justify-center pt-2">
+          <div className="w-1 h-2 bg-[var(--foreground)]/60 rounded-full" />
         </div>
       </motion.div>
     </section>

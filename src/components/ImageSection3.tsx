@@ -22,8 +22,8 @@ export default function ImageSection3() {
           className="object-cover"
           priority
         />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/85 via-[#0a0a0a]/50 to-[#0a0a0a]/85" />
+        {/* Theme-aware Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--background)]/85 via-[var(--background)]/50 to-[var(--background)]/85" />
       </div>
 
       {/* Content - Center aligned */}
@@ -36,7 +36,7 @@ export default function ImageSection3() {
         >
           {/* Label */}
           <motion.span
-            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[#A8EDDF] uppercase mb-6"
+            className="inline-block text-[12px] font-semibold tracking-[0.3em] text-[var(--primary-accent)] uppercase mb-6 drop-shadow-[0_0_8px_var(--primary-accent)]/50"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -46,21 +46,21 @@ export default function ImageSection3() {
 
           {/* Headline */}
           <motion.h2
-            className="text-[56px] lg:text-[72px] font-bold text-white leading-[1.1] tracking-tight"
+            className="text-[56px] lg:text-[72px] font-bold text-[var(--foreground)] leading-[1.1] tracking-tight"
             initial={{ opacity: 0, y: 40 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             Built for India.
             <br />
-            <span className="text-transparent bg-gradient-to-r from-[#F2C4CE] via-[#A8EDDF] to-[#F2C4CE] bg-clip-text">
+            <span className="text-transparent bg-gradient-to-r from-[var(--primary-accent)] via-[var(--secondary-accent)] to-[var(--primary-accent)] bg-[length:200%_auto] animate-gradient-slow bg-clip-text drop-shadow-[0_0_15px_var(--primary-accent)]/30">
               Ready for the World.
             </span>
           </motion.h2>
 
           {/* Subtext */}
           <motion.p
-            className="text-[18px] text-[#8A9BB0] mt-6 mx-auto max-w-lg leading-relaxed"
+            className="text-[18px] text-[var(--text-muted)] mt-6 mx-auto max-w-lg leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -76,7 +76,7 @@ export default function ImageSection3() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <button className="h-14 px-10 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#A8EDDF] text-[#0a0a0a] font-semibold text-[15px] hover:scale-105 transition-transform">
+            <button className="h-14 px-10 rounded-full bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] font-semibold text-[15px] hover:scale-105 hover:shadow-[0_0_20px_var(--secondary-accent)]/40 transition-all duration-300">
               Get Started
             </button>
           </motion.div>
@@ -84,7 +84,7 @@ export default function ImageSection3() {
       </div>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--background)] to-transparent" />
     </section>
   );
 }
