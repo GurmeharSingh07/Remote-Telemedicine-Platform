@@ -7,6 +7,11 @@ const prescriptionSchema = new mongoose.Schema(
             ref: 'User',
             required: [true, 'Patient is required']
         },
+        doctorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Doctor',
+            default: undefined
+        },
         doctor: {
             type: String,
             required: [true, 'Doctor name is required'],
@@ -31,5 +36,6 @@ const prescriptionSchema = new mongoose.Schema(
 );
 
 prescriptionSchema.index({ patient: 1, date: -1, createdAt: -1 });
+prescriptionSchema.index({ doctorId: 1, date: -1, createdAt: -1 });
 
 module.exports = mongoose.model('Prescription', prescriptionSchema);

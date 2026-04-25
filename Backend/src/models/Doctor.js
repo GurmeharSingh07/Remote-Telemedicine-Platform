@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const WORKING_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
 const doctorSchema = new mongoose.Schema(
     {
         name: {
@@ -7,6 +9,17 @@ const doctorSchema = new mongoose.Schema(
             required: [true, 'Doctor name is required'],
             trim: true,
             maxlength: [120, 'Doctor name cannot exceed 120 characters']
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: undefined
+        },
+        email: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            default: undefined
         },
         specialty: {
             type: String,
@@ -51,6 +64,31 @@ const doctorSchema = new mongoose.Schema(
         phone: {
             type: String,
             default: ''
+        },
+        schedule: {
+            workingDays: {
+                type: [String],
+                enum: WORKING_DAYS,
+                default: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+            },
+            startTime: {
+                type: String,
+                default: '09:00'
+            },
+            endTime: {
+                type: String,
+                default: '17:00'
+            },
+            slotDurationMinutes: {
+                type: Number,
+                default: 30,
+                min: [5, 'Slot duration cannot be less than 5 minutes'],
+                max: [180, 'Slot duration cannot exceed 180 minutes']
+            },
+            updatedAt: {
+                type: Date,
+                default: Date.now
+            }
         }
     },
     {
@@ -59,5 +97,15 @@ const doctorSchema = new mongoose.Schema(
 );
 
 doctorSchema.index({ specialty: 1, name: 1 });
+doctorSchema.index({ user: 1 }, { unique: true, sparse: true });
+doctorSchema.index(
+    { email: 1 },
+    {
+        unique: true,
+        partialFilterExpression: {
+            email: { $type: 'string' }
+        }
+    }
+);
 
 module.exports = mongoose.model('Doctor', doctorSchema);
