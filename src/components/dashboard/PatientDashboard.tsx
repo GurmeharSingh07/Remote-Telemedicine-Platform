@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -8,11 +8,9 @@ import {
   FileText,
   FlaskConical,
   Pill,
-  MessageSquare,
   MapPin,
   Star,
   Clock,
-  ChevronRight,
   Search,
   Filter,
   Navigation,
@@ -22,37 +20,20 @@ import {
   X,
   CheckCircle2,
   Loader2,
-  User,
   AlertCircle,
-  ListFilter,
 } from "lucide-react";
-
-interface Doctor {
-  id: number;
-  name: string;
-  specialty: string;
-  hospital: string;
-  location: string;
-  rating: number;
-  experience: string;
-  distance: string;
-  available: boolean;
-  image: string;
-}
-
-interface Appointment {
-  id: number;
-  patientId: string;
-  patientName: string;
-  doctorId: number;
-  doctorName: string;
-  specialty: string;
-  hospital: string;
-  date: string;
-  time: string;
-  status: string;
-  reason?: string;
-}
+import { getAuthSession } from "@/lib/auth";
+import {
+  bookPatientAppointment,
+  cancelPatientAppointment,
+  fetchPatientDashboard,
+  fetchPatientDoctors,
+  type PatientAppointment,
+  type PatientDoctor,
+  type PatientMedicalRecord,
+  type PatientPrescription,
+  type PatientTestResult,
+} from "@/lib/patientDashboard";
 
 interface StatsCardProps {
   label: string;
@@ -76,29 +57,6 @@ const StatsCard = ({ label, value, icon, color, onClick }: StatsCardProps) => (
   </motion.div>
 );
 
-const appointments: Appointment[] = [
-  { id: 1, patientId: "patient-001", patientName: "Rahul Sharma", doctorId: 1, doctorName: "Dr. Priya Menon", specialty: "Cardiologist", hospital: "Apollo Chennai", date: "2026-04-21", time: "10:00 AM", status: "confirmed" },
-  { id: 2, patientId: "patient-001", patientName: "Rahul Sharma", doctorId: 2, doctorName: "Dr. Rahul Sharma", specialty: "Neurologist", hospital: "Fortis Mumbai", date: "2026-04-23", time: "2:30 PM", status: "pending" },
-  { id: 3, patientId: "patient-001", patientName: "Rahul Sharma", doctorId: 3, doctorName: "Dr. Sunita Devi", specialty: "Dermatologist", hospital: "Max Delhi", date: "2026-04-05", time: "11:00 AM", status: "completed" },
-];
-
-const medicalRecords = [
-  { id: 1, title: "Annual Health Checkup", date: "2026-03-15", hospital: "Apollo Chennai", type: "Checkup", icon: "📋" },
-  { id: 2, title: "ECG Report", date: "2026-02-20", hospital: "Fortis Mumbai", type: "Test", icon: "❤️" },
-  { id: 3, title: "Blood Test Results", date: "2026-01-10", hospital: "Max Delhi", type: "Lab", icon: "🩸" },
-];
-
-const testResults = [
-  { id: 1, test: "Complete Blood Count", date: "2026-04-01", status: "Ready", hospital: "Apollo Chennai", icon: "🔬" },
-  { id: 2, test: "Lipid Profile", date: "2026-04-01", status: "Ready", hospital: "Apollo Chennai", icon: "🧪" },
-  { id: 3, test: "Thyroid Function", date: "2026-03-25", status: "Pending", hospital: "Max Delhi", icon: "🧬" },
-];
-
-const prescriptions = [
-  { id: 1, doctor: "Dr. Priya Menon", date: "2026-04-05", medicines: ["Aspirin 75mg", "Metoprolol 50mg"], validUntil: "2026-05-05" },
-  { id: 2, doctor: "Dr. Rahul Sharma", date: "2026-03-20", medicines: ["Vitamin D3 1000IU", "Calcium 500mg"], validUntil: "2026-04-20" },
-];
-
 const specialties = [
   "All", "Cardiologist", "Neurologist", "Dermatologist", "Orthopedic",
   "Pediatrician", "Gastroenterologist", "General Physician", "Pulmonologist",
@@ -111,6 +69,20 @@ interface PatientDashboardProps {
   onActiveItemChange?: (item: string) => void;
 }
 
+const getInitials = (name: string): string => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length === 0) {
+    return "DR";
+  }
+
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+};
+
 export default function PatientDashboard({ activeItem: externalActiveItem, onActiveItemChange }: PatientDashboardProps) {
   const [internalActiveTab, setInternalActiveTab] = useState("dashboard");
   const activeTab = externalActiveItem !== undefined ? externalActiveItem : internalActiveTab;
@@ -121,13 +93,22 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
       setInternalActiveTab(item);
     }
   };
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  const [patientName, setPatientName] = useState("Patient");
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [appointments, setAppointments] = useState<PatientAppointment[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<PatientMedicalRecord[]>([]);
+  const [testResults, setTestResults] = useState<PatientTestResult[]>([]);
+  const [prescriptions, setPrescriptions] = useState<PatientPrescription[]>([]);
+  const [doctors, setDoctors] = useState<PatientDoctor[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMapFullscreen, setShowMapFullscreen] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<PatientDoctor | null>(null);
   const [bookingForm, setBookingForm] = useState({
     date: "",
     time: "",
@@ -135,6 +116,8 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState("");
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [cancellingAppointmentId, setCancellingAppointmentId] = useState<string | null>(null);
 
   const tabs = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -146,25 +129,84 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
     { id: "nearby", label: "Doctors", icon: MapPin },
   ];
 
+  const loadDashboardData = async (token: string, showLoadingState = false) => {
+    if (showLoadingState) {
+      setDashboardLoading(true);
+    }
+
+    try {
+      const data = await fetchPatientDashboard(token);
+
+      setPatientName(data.patient.name || "Patient");
+      setAppointments(data.appointments);
+      setMedicalRecords(data.medicalRecords);
+      setTestResults(data.testResults);
+      setPrescriptions(data.prescriptions);
+      setDashboardError("");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to load patient dashboard data.";
+      setDashboardError(message);
+    } finally {
+      if (showLoadingState) {
+        setDashboardLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    let isActive = true;
+
+    const initializeDashboard = async () => {
+      const session = getAuthSession();
+
+      if (!session) {
+        if (isActive) {
+          setDashboardError("Session expired. Please login again.");
+          setDashboardLoading(false);
+        }
+        return;
+      }
+
+      if (isActive) {
+        setAuthToken(session.token);
+        setPatientName(session.user.name || "Patient");
+      }
+
+      await loadDashboardData(session.token, true);
+    };
+
+    initializeDashboard();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const fetchDoctors = useCallback(async (tokenOverride?: string) => {
+    const token = tokenOverride ?? authToken;
+    if (!token) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const doctorsData = await fetchPatientDoctors(token, selectedSpecialty);
+      setDoctors(doctorsData);
+      setDashboardError("");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to fetch doctors.";
+      setDashboardError(message);
+    } finally {
+      setLoading(false);
+    }
+  }, [authToken, selectedSpecialty]);
+
   useEffect(() => {
     if (activeTab === "nearby" || activeTab === "book-appointment") {
       fetchDoctors();
     }
-  }, [activeTab, selectedSpecialty]);
-
-  const fetchDoctors = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/doctors?action=doctors&specialty=${selectedSpecialty}`);
-      const data = await res.json();
-      if (data.success) {
-        setDoctors(data.doctors);
-      }
-    } catch (error) {
-      console.error("Failed to fetch doctors:", error);
-    }
-    setLoading(false);
-  };
+  }, [activeTab, fetchDoctors]);
 
   const handleBookAppointment = async () => {
     if (!selectedDoctor || !bookingForm.date || !bookingForm.time) {
@@ -172,55 +214,81 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
       return;
     }
 
+    if (!authToken) {
+      setBookingError("Session expired. Please login again.");
+      return;
+    }
+
+    setBookingLoading(true);
+
     try {
-      const res = await fetch("/api/appointments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "bookAppointment",
-          patientId: "patient-001",
-          patientName: "Rahul Sharma",
-          doctorId: selectedDoctor.id,
-          doctorName: selectedDoctor.name,
-          specialty: selectedDoctor.specialty,
-          hospital: selectedDoctor.hospital,
-          date: bookingForm.date,
-          time: bookingForm.time,
-          reason: bookingForm.reason,
-        }),
+      await bookPatientAppointment(authToken, {
+        doctorId: selectedDoctor.id,
+        date: bookingForm.date,
+        time: bookingForm.time,
+        reason: bookingForm.reason,
       });
 
-      const data = await res.json();
-      if (data.success) {
-        setBookingSuccess(true);
-        setBookingError("");
-        setTimeout(() => {
-          setShowBookingModal(false);
-          setBookingSuccess(false);
-          setSelectedDoctor(null);
-          setBookingForm({ date: "", time: "", reason: "" });
-          setActiveTab("appointments");
-        }, 2000);
-      } else {
-        setBookingError(data.error || "Failed to book appointment");
-      }
+      await loadDashboardData(authToken);
+      setBookingSuccess(true);
+      setBookingError("");
+
+      setTimeout(() => {
+        setShowBookingModal(false);
+        setBookingSuccess(false);
+        setSelectedDoctor(null);
+        setBookingForm({ date: "", time: "", reason: "" });
+        setActiveTab("appointments");
+      }, 1800);
     } catch (error) {
-      setBookingError("Something went wrong. Please try again.");
+      const message = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      setBookingError(message);
+    } finally {
+      setBookingLoading(false);
     }
   };
 
-  const openBookingModal = (doctor: Doctor) => {
+  const handleCancelAppointment = async (appointmentId: string) => {
+    if (!authToken) {
+      setDashboardError("Session expired. Please login again.");
+      return;
+    }
+
+    setCancellingAppointmentId(appointmentId);
+
+    try {
+      const updatedAppointment = await cancelPatientAppointment(authToken, appointmentId);
+      setAppointments((prev) => prev.map((apt) => (apt.id === appointmentId ? updatedAppointment : apt)));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to cancel appointment.";
+      setDashboardError(message);
+    } finally {
+      setCancellingAppointmentId(null);
+    }
+  };
+
+  const openBookingModal = (doctor: PatientDoctor) => {
     setSelectedDoctor(doctor);
     setShowBookingModal(true);
     setBookingSuccess(false);
     setBookingError("");
   };
 
-  const filteredDoctors = doctors.filter(doctor =>
+  const filteredDoctors = doctors.filter((doctor) =>
     doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.hospital.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.specialty.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const patientFirstName = patientName.trim().split(/\s+/)[0] || "Patient";
+
+  if (dashboardLoading) {
+    return (
+      <div className="bg-[var(--background-alt)] rounded-2xl border border-[var(--border-color)] p-10 flex items-center justify-center">
+        <Loader2 size={32} className="animate-spin text-[var(--primary-accent)]" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -232,7 +300,7 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
           <div>
-            <h1 className="text-xl md:text-[24px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)]">Welcome back, Rahul! 👋</h1>
+            <h1 className="text-xl md:text-[24px] font-bold text-[var(--foreground)] font-[family-name:var(--font-heading)]">Welcome back, {patientFirstName}! 👋</h1>
             <p className="text-[var(--text-muted)] mt-1 text-sm md:text-base">Your health is our priority.</p>
           </div>
           <div className="flex items-center gap-2 text-[var(--text-muted)] text-xs md:text-sm">
@@ -242,9 +310,16 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
         </div>
       </motion.div>
 
+      {dashboardError && (
+        <div className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 p-3">
+          <AlertCircle size={16} className="text-red-500 mt-0.5 flex-shrink-0" />
+          <p className="text-[12px] md:text-sm text-red-500">{dashboardError}</p>
+        </div>
+      )}
+
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-        <StatsCard label="Appointments" value={appointments.filter(a => a.status !== "completed").length} icon="📅" color="from-[#F2C4CE] to-[#C2626A]" onClick={() => setActiveTab("appointments")} />
+        <StatsCard label="Appointments" value={appointments.filter((a) => !["completed", "cancelled"].includes(a.status)).length} icon="📅" color="from-[#F2C4CE] to-[#C2626A]" onClick={() => setActiveTab("appointments")} />
         <StatsCard label="Records" value={medicalRecords.length} icon="📁" color="from-[#A8EDDF] to-[#14A3A8]" onClick={() => setActiveTab("records")} />
         <StatsCard label="Test Results" value={testResults.length} icon="🔬" color="from-[#C9A96E] to-[#B8954A]" onClick={() => setActiveTab("tests")} />
         <StatsCard label="Prescriptions" value={prescriptions.length} icon="💊" color="from-[#00E5FF] to-[#B535F6]" onClick={() => setActiveTab("prescriptions")} />
@@ -257,11 +332,10 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 text-[12px] md:text-[14px] font-medium whitespace-nowrap transition-all rounded-lg md:rounded-xl ${
-                activeTab === tab.id
-                  ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] shadow-[0_4px_12px_rgba(13,115,119,0.3)]"
-                  : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10"
-              }`}
+              className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 md:py-2.5 text-[12px] md:text-[14px] font-medium whitespace-nowrap transition-all rounded-lg md:rounded-xl ${activeTab === tab.id
+                ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] shadow-[0_4px_12px_rgba(13,115,119,0.3)]"
+                : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10"
+                }`}
             >
               <span className="hidden sm:inline">{tab.label}</span>
               <span className="sm:hidden">{tab.label.substring(0, 4)}</span>
@@ -296,11 +370,10 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
               <button
                 key={specialty}
                 onClick={() => setSelectedSpecialty(specialty.toLowerCase())}
-                className={`px-3 py-1.5 rounded-full text-[11px] md:text-[13px] font-medium whitespace-nowrap transition-all ${
-                  selectedSpecialty === specialty.toLowerCase()
-                    ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)]"
-                    : "bg-[var(--background-alt)] border border-[var(--border-color)] text-[var(--text-muted)]"
-                }`}
+                className={`px-3 py-1.5 rounded-full text-[11px] md:text-[13px] font-medium whitespace-nowrap transition-all ${selectedSpecialty === specialty.toLowerCase()
+                  ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)]"
+                  : "bg-[var(--background-alt)] border border-[var(--border-color)] text-[var(--text-muted)]"
+                  }`}
               >
                 {specialty}
               </button>
@@ -323,7 +396,7 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
                 >
                   <div className="flex items-start gap-3 md:gap-4">
                     <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] font-bold text-lg md:text-xl shadow-[0_4px_12px_rgba(13,115,119,0.3)] flex-shrink-0">
-                      {doctor.image}
+                      {doctor.image || getInitials(doctor.name)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-[15px] md:text-[16px] font-bold text-[var(--foreground)] truncate">{doctor.name}</h4>
@@ -396,16 +469,21 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
                     </div>
                   </div>
                   <div className="flex items-center gap-2 sm:flex-col sm:items-end">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium ${
-                      apt.status === "confirmed" ? "bg-green-500/10 text-green-500" :
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium ${apt.status === "confirmed" ? "bg-green-500/10 text-green-500" :
                       apt.status === "pending" ? "bg-yellow-500/10 text-yellow-500" :
-                      apt.status === "completed" ? "bg-blue-500/10 text-blue-500" :
-                      "bg-red-500/10 text-red-500"
-                    }`}>
+                        apt.status === "completed" ? "bg-blue-500/10 text-blue-500" :
+                          "bg-red-500/10 text-red-500"
+                      }`}>
                       {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
                     </span>
                     {apt.status === "pending" && (
-                      <button className="text-[11px] md:text-xs text-red-500 hover:underline">Cancel</button>
+                      <button
+                        onClick={() => handleCancelAppointment(apt.id)}
+                        disabled={cancellingAppointmentId === apt.id}
+                        className="text-[11px] md:text-xs text-red-500 hover:underline disabled:opacity-60"
+                      >
+                        {cancellingAppointmentId === apt.id ? "Cancelling..." : "Cancel"}
+                      </button>
                     )}
                   </div>
                 </div>
@@ -472,9 +550,8 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
                     <span className="text-[11px] md:text-[12px] text-[var(--primary-accent)]">{test.date}</span>
                   </div>
                 </div>
-                <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium ${
-                  test.status === "Ready" ? "bg-green-500/10 text-green-500" : "bg-yellow-500/10 text-yellow-500"
-                }`}>
+                <span className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-medium ${test.status === "Ready" ? "bg-green-500/10 text-green-500" : "bg-yellow-500/10 text-yellow-500"
+                  }`}>
                   {test.status}
                 </span>
               </div>
@@ -544,11 +621,10 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
               <button
                 key={specialty}
                 onClick={() => setSelectedSpecialty(specialty.toLowerCase())}
-                className={`px-3 py-1.5 md:px-4 py-2 rounded-full text-[12px] md:text-[13px] font-medium transition-all ${
-                  selectedSpecialty === specialty.toLowerCase()
-                    ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)]"
-                    : "bg-[var(--background-alt)] border border-[var(--border-color)] text-[var(--text-muted)]"
-                }`}
+                className={`px-3 py-1.5 md:px-4 py-2 rounded-full text-[12px] md:text-[13px] font-medium transition-all ${selectedSpecialty === specialty.toLowerCase()
+                  ? "bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)]"
+                  : "bg-[var(--background-alt)] border border-[var(--border-color)] text-[var(--text-muted)]"
+                  }`}
               >
                 {specialty}
               </button>
@@ -724,7 +800,7 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
 
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--background)] mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] font-bold">
-                      {selectedDoctor.image}
+                      {selectedDoctor.image || getInitials(selectedDoctor.name)}
                     </div>
                     <div>
                       <h4 className="font-semibold text-[var(--foreground)]">{selectedDoctor.name}</h4>
@@ -787,9 +863,10 @@ export default function PatientDashboard({ activeItem: externalActiveItem, onAct
                     </button>
                     <button
                       onClick={handleBookAppointment}
-                      className="flex-1 h-11 rounded-xl bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] font-semibold"
+                      disabled={bookingLoading}
+                      className="flex-1 h-11 rounded-xl bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] text-[var(--background)] font-semibold disabled:opacity-70"
                     >
-                      Confirm Booking
+                      {bookingLoading ? "Booking..." : "Confirm Booking"}
                     </button>
                   </div>
                 </>

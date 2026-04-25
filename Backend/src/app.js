@@ -3,6 +3,7 @@ const config = require('./config');
 const connectDatabase = require('./database/connection');
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
+const patientRoutes = require('./routes/patientRoutes');
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/patient', patientRoutes);
 
 app.get('/health', (req, res) => {
     res.json({
