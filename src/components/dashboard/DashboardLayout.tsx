@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "../ThemeToggle";
+import { clearAuthSession, getAuthSession, saveAuthSession, validateStoredSession } from "@/lib/auth";
 import {
   LayoutDashboard,
   Users,
@@ -20,11 +21,9 @@ import {
   Building2,
   FlaskConical,
   CreditCard,
-  TestTube,
   MapPin,
   Menu,
   X,
-  Home,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -74,6 +73,8 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [internalActiveItem, setInternalActiveItem] = useState("dashboard");
+  const [userName, setUserName] = useState("User");
+  const [userInitials, setUserInitials] = useState("US");
   const activeItem = externalActiveItem !== undefined ? externalActiveItem : internalActiveItem;
   const setActiveItem = (item: string) => {
     if (onActiveItemChange) {
@@ -82,6 +83,22 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
       setInternalActiveItem(item);
     }
   };
+
+  const getInitials = (name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      return "US";
+    }
+
+    const parts = trimmed.split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+
+    return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+  };
+
+  const firstName = userName.trim().split(/\s+/)[0] || "User";
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -98,7 +115,48 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+  useEffect(() => {
+    let isActive = true;
+
+    const initializeSession = async () => {
+      const session = getAuthSession();
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
+
+      try {
+        const refreshedSession = await validateStoredSession(session);
+        if (!isActive) {
+          return;
+        }
+
+        saveAuthSession(refreshedSession);
+
+        if (refreshedSession.role !== role) {
+          router.replace(`/dashboard/${refreshedSession.role}`);
+          return;
+        }
+
+        setUserName(refreshedSession.user.name || "User");
+        setUserInitials(getInitials(refreshedSession.user.name || "User"));
+      } catch {
+        clearAuthSession();
+        if (isActive) {
+          router.replace("/login");
+        }
+      }
+    };
+
+    initializeSession();
+
+    return () => {
+      isActive = false;
+    };
+  }, [role, router]);
+
   const handleLogout = () => {
+    clearAuthSession();
     router.push("/login");
   };
 
@@ -138,9 +196,8 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
 
       {/* Sidebar - Desktop */}
       <aside
-        className={`hidden lg:flex fixed left-0 top-0 h-full bg-[var(--background-alt)] border-r border-[var(--border-color)] shadow-[var(--shadow-default)] transition-all duration-300 z-50 flex-col ${
-          sidebarOpen ? "w-64" : "w-20"
-        }`}
+        className={`hidden lg:flex fixed left-0 top-0 h-full bg-[var(--background-alt)] border-r border-[var(--border-color)] shadow-[var(--shadow-default)] transition-all duration-300 z-50 flex-col ${sidebarOpen ? "w-64" : "w-20"
+          }`}
       >
         {/* Logo */}
         <div className="h-16 flex items-center px-4 border-b border-[var(--border-color)]">
@@ -158,11 +215,10 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
               <button
                 key={item.href}
                 onClick={() => handleNavClick(item.href)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
-                  isActive
-                    ? `bg-gradient-to-r ${roleColors[role]} text-[#0a0a0a] font-medium shadow-[0_4px_12px_rgba(168,237,223,0.3)]`
-                    : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10 hover:text-[var(--foreground)]"
-                }`}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive
+                  ? `bg-gradient-to-r ${roleColors[role]} text-[#0a0a0a] font-medium shadow-[0_4px_12px_rgba(168,237,223,0.3)]`
+                  : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10 hover:text-[var(--foreground)]"
+                  }`}
               >
                 <Icon size={20} className={isActive ? "text-[#0a0a0a] flex-shrink-0" : "flex-shrink-0"} />
                 {sidebarOpen && <span className="text-[14px] whitespace-nowrap">{item.label}</span>}
@@ -223,11 +279,10 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
                   <button
                     key={item.href}
                     onClick={() => handleNavClick(item.href)}
-                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isActive
-                        ? `bg-gradient-to-r ${roleColors[role]} text-[#0a0a0a] font-medium`
-                        : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10 hover:text-[var(--foreground)]"
-                    }`}
+                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${isActive
+                      ? `bg-gradient-to-r ${roleColors[role]} text-[#0a0a0a] font-medium`
+                      : "text-[var(--text-muted)] hover:bg-[var(--primary-accent)]/10 hover:text-[var(--foreground)]"
+                      }`}
                   >
                     <Icon size={20} className={isActive ? "text-[#0a0a0a]" : ""} />
                     <span className="text-[15px]">{item.label}</span>
@@ -264,7 +319,7 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
             </button>
             <div>
               <h2 className="text-base md:text-lg font-bold text-[var(--foreground)]">{roleNames[role]}</h2>
-              <p className="text-[11px] md:text-[12px] text-[var(--text-muted)] hidden sm:block">Welcome back!</p>
+              <p className="text-[11px] md:text-[12px] text-[var(--text-muted)] hidden sm:block">Welcome back, {firstName}!</p>
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
@@ -274,7 +329,7 @@ export default function DashboardLayout({ children, role, activeItem: externalAc
             </button>
             <ThemeToggle />
             <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-[var(--primary-accent)] to-[var(--secondary-accent)] flex items-center justify-center text-[var(--background)] font-bold text-sm shadow-[0_4px_12px_rgba(13,115,119,0.3)]">
-              {role === "patient" ? "RS" : role === "doctor" ? "PM" : "AD"}
+              {userInitials}
             </div>
           </div>
         </header>
