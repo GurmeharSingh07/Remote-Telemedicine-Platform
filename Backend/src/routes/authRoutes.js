@@ -18,7 +18,10 @@ const registerValidation = [
         .normalizeEmail(),
     body('password')
         .notEmpty().withMessage('Password is required')
-        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+        .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('role')
+        .optional()
+        .isIn(['patient', 'doctor', 'admin']).withMessage('Role must be patient, doctor, or admin')
 ];
 
 const loginValidation = [
