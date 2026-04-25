@@ -1,0 +1,27 @@
+{
+    "name": "backend-mvp-auth",
+    "version": "1.0.0",
+    "description": "Node.js backend with MVP architecture and authentication",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "node --watch src/app.js"
+    },
+    "keywords": [
+        "nodejs",
+        "mvp",
+        "auth",
+        "api"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.0",
+        "express-validator": "^7.2.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongodb": "^7.1.1",
+        "mongoose": "^8.6.0"
+    }
+}
