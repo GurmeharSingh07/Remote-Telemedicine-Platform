@@ -14,87 +14,6 @@ const DEFAULT_SCHEDULE = {
     slotDurationMinutes: 30
 };
 
-const DEFAULT_DOCTORS = [
-    {
-        name: 'Dr. Priya Menon',
-        email: 'priya.menon@healnet.example',
-        specialty: 'Cardiologist',
-        hospital: 'Apollo Chennai',
-        location: 'Chennai, Tamil Nadu',
-        rating: 4.9,
-        experience: '15 years',
-        distance: '2.3 km',
-        available: true,
-        image: 'PM',
-        phone: '+91 98765 10001'
-    },
-    {
-        name: 'Dr. Rahul Sharma',
-        email: 'rahul.sharma@healnet.example',
-        specialty: 'Neurologist',
-        hospital: 'Fortis Mumbai',
-        location: 'Mumbai, Maharashtra',
-        rating: 4.8,
-        experience: '12 years',
-        distance: '4.1 km',
-        available: true,
-        image: 'RS',
-        phone: '+91 98765 10002'
-    },
-    {
-        name: 'Dr. Sunita Devi',
-        email: 'sunita.devi@healnet.example',
-        specialty: 'Dermatologist',
-        hospital: 'Max Delhi',
-        location: 'Delhi NCR',
-        rating: 4.7,
-        experience: '10 years',
-        distance: '5.8 km',
-        available: false,
-        image: 'SD',
-        phone: '+91 98765 10003'
-    },
-    {
-        name: 'Dr. Arjun Patel',
-        email: 'arjun.patel@healnet.example',
-        specialty: 'Orthopedic',
-        hospital: 'Medanta Gurgaon',
-        location: 'Gurgaon, Haryana',
-        rating: 4.9,
-        experience: '18 years',
-        distance: '7.2 km',
-        available: true,
-        image: 'AP',
-        phone: '+91 98765 10004'
-    },
-    {
-        name: 'Dr. Kavita Singh',
-        email: 'kavita.singh@healnet.example',
-        specialty: 'Pediatrician',
-        hospital: 'Manipal Bangalore',
-        location: 'Bangalore, Karnataka',
-        rating: 4.8,
-        experience: '14 years',
-        distance: '3.5 km',
-        available: true,
-        image: 'KS',
-        phone: '+91 98765 10005'
-    },
-    {
-        name: 'Dr. Rajesh Gupta',
-        email: 'rajesh.gupta@healnet.example',
-        specialty: 'Pulmonologist',
-        hospital: 'Max Delhi',
-        location: 'Delhi NCR',
-        rating: 4.7,
-        experience: '13 years',
-        distance: '4.5 km',
-        available: true,
-        image: 'RG',
-        phone: '+91 98765 10006'
-    }
-];
-
 class DoctorPresenter {
     constructor() {
         this.hasEnsuredDoctorIndexes = false;
@@ -119,19 +38,6 @@ class DoctorPresenter {
             this.hasEnsuredDoctorIndexes = true;
         } catch (error) {
             // no-op; we continue with runtime behavior even if index migration fails.
-        }
-    }
-
-    async ensureDoctorSeedData() {
-        try {
-            await this.ensureDoctorIndexes();
-
-            const count = await Doctor.estimatedDocumentCount();
-            if (count === 0) {
-                await Doctor.insertMany(DEFAULT_DOCTORS, { ordered: false });
-            }
-        } catch (error) {
-            // no-op; dashboard should still work if seed fails.
         }
     }
 
@@ -397,7 +303,7 @@ class DoctorPresenter {
             return { error: { success: false, status: 404, message: 'User not found' } };
         }
 
-        await this.ensureDoctorSeedData();
+        await this.ensureDoctorIndexes();
 
         const normalizedName = this.normalizeName(user.name);
         const normalizedEmail = this.normalizeEmail(user.email);

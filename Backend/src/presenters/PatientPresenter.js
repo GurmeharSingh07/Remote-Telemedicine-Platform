@@ -5,93 +5,7 @@ const Prescription = require('../models/Prescription');
 const TestResult = require('../models/TestResult');
 const User = require('../models/User');
 
-const DEFAULT_DOCTORS = [
-    {
-        name: 'Dr. Priya Menon',
-        specialty: 'Cardiologist',
-        hospital: 'Apollo Chennai',
-        location: 'Chennai, Tamil Nadu',
-        rating: 4.9,
-        experience: '15 years',
-        distance: '2.3 km',
-        available: true,
-        image: 'PM',
-        phone: '+91 98765 10001'
-    },
-    {
-        name: 'Dr. Rahul Sharma',
-        specialty: 'Neurologist',
-        hospital: 'Fortis Mumbai',
-        location: 'Mumbai, Maharashtra',
-        rating: 4.8,
-        experience: '12 years',
-        distance: '4.1 km',
-        available: true,
-        image: 'RS',
-        phone: '+91 98765 10002'
-    },
-    {
-        name: 'Dr. Sunita Devi',
-        specialty: 'Dermatologist',
-        hospital: 'Max Delhi',
-        location: 'Delhi NCR',
-        rating: 4.7,
-        experience: '10 years',
-        distance: '5.8 km',
-        available: false,
-        image: 'SD',
-        phone: '+91 98765 10003'
-    },
-    {
-        name: 'Dr. Arjun Patel',
-        specialty: 'Orthopedic',
-        hospital: 'Medanta Gurgaon',
-        location: 'Gurgaon, Haryana',
-        rating: 4.9,
-        experience: '18 years',
-        distance: '7.2 km',
-        available: true,
-        image: 'AP',
-        phone: '+91 98765 10004'
-    },
-    {
-        name: 'Dr. Kavita Singh',
-        specialty: 'Pediatrician',
-        hospital: 'Manipal Bangalore',
-        location: 'Bangalore, Karnataka',
-        rating: 4.8,
-        experience: '14 years',
-        distance: '3.5 km',
-        available: true,
-        image: 'KS',
-        phone: '+91 98765 10005'
-    },
-    {
-        name: 'Dr. Rajesh Gupta',
-        specialty: 'Pulmonologist',
-        hospital: 'Max Delhi',
-        location: 'Delhi NCR',
-        rating: 4.7,
-        experience: '13 years',
-        distance: '4.5 km',
-        available: true,
-        image: 'RG',
-        phone: '+91 98765 10006'
-    }
-];
-
 class PatientPresenter {
-    async ensureDoctorSeedData() {
-        try {
-            const count = await Doctor.estimatedDocumentCount();
-            if (count === 0) {
-                await Doctor.insertMany(DEFAULT_DOCTORS);
-            }
-        } catch (error) {
-            // No-op: dashboard still works even if seed step fails.
-        }
-    }
-
     toId(value) {
         if (!value) {
             return '';
@@ -234,8 +148,6 @@ class PatientPresenter {
 
     async getDoctors(filters = {}) {
         try {
-            await this.ensureDoctorSeedData();
-
             const query = {};
 
             if (filters.specialty && filters.specialty.toLowerCase() !== 'all') {
