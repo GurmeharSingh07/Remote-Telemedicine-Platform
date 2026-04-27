@@ -1,1 +1,0 @@
-# Remote-Telemedicine-Platform
